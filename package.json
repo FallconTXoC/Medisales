@@ -1,0 +1,42 @@
+{
+  "name": "projet-medisales",
+  "version": "1.0.0",
+  "description": "Application de gestion pour des visiteurs médicaux",
+  "main": "app.js",
+  "scripts": {
+    "test": "nodemon --ignore data/"
+  },
+  "author": "Murolo Mathis",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "base64-url": "^2.3.3",
+    "bcrypt": "^5.0.1",
+    "blob-stream": "^0.1.3",
+    "body-parser": "^1.19.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "date-fns": "^2.28.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-fileupload": "^1.3.1",
+    "form-data": "^4.0.0",
+    "fs": "0.0.1-security",
+    "helmet": "^5.0.2",
+    "html-entities": "^2.3.2",
+    "http": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "jspdf": "^2.5.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "nocache": "^3.0.2",
+    "path": "^0.12.7",
+    "pdf-lib": "^1.17.1",
+    "pdfkit": "^0.13.0",
+    "socket.io": "^4.4.1",
+    "twig": "^1.15.4",
+    "uniqid": "^5.4.0",
+    "uuid": "^8.3.2",
+    "yup": "^0.32.11"
+  }
+}
