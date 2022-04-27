@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <meta name="description" content="{{ description }}">
+    <link href="/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="/libs/socketio/socket.io.js"></script>
+    <script src="/libs/jquery/jquery.js"></script>
+    <script src="/libs/jquery/jqueryui.js"></script>
+    {# {% if disable.notifications is not defined %}
+        <script src="/js/notifications.js"></script>
+    {% endif %} #}
+    {% for file in js_files %}
+        <script type="module" src="{{ file.src }}" {% if file.defer %}defer{% endif %}></script>
+    {% endfor %}
+</head>
+<body>
+    {% if disable.navbar is not defined %}
+        <div class="navbar">
+            <nav class="nav">
+                <div class="navlist">
+                    <a></a>
+                    <a></a>
+                    <a></a>
+                </div>
+            </nav>
+        </div>
+
+        <div class="topnav"></div>
+    {% endif %}
+    <main class="content">
+        {% if content %}
+            {% include content %}
+        {% endif %}
+        <div class="notification-popup-container"></div>
+    </main>
+</body>
+</html>

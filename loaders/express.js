@@ -1,4 +1,3 @@
-const fs = require(`fs`);
 const express = require(`express`);
 const path = require(`path`);
 const bodyparser = require(`body-parser`);
@@ -8,25 +7,17 @@ const cookieParser = require(`cookie-parser`);
 const noCache = require(`nocache`);
 const cors = require(`cors`);
 const routes = require(`../routes`);
+const socketHelper = require(`../utils/socket`);
+const tokenHelper = require(`../utils/token`);
+const User = require("../models/user");
 require(`dotenv`).config();
 
 class ExpressLoader {
     constructor() {
         const app = express();
         const server = require('http').createServer(app);
-        //const io = helper.socket(server);
+        const io = socketHelper.socket(server);
 
-        app.set("twig options", {
-            "allow_async": true,
-            "autoescape": false,
-            "cache": false,
-            "strict_variables": false,
-            "debug": false,
-            "auto_reload": true,
-        });
-        app.set('views', path.join(__dirname, `static`, `views`));
-        app.set('view engine', 'twig');
-        app.set('view cache', false);
         app.use(cors());
         app.use(helmet({
             contentSecurityPolicy: false,
@@ -37,8 +28,19 @@ class ExpressLoader {
         app.use(cookieParser())
         app.use(bodyparser.json());
         app.use(noCache());
-        app.use(express.static(path.join(__dirname, "static")));
-        app.use(express.static(path.join(__dirname, "data")));
+        app.set("twig options", {
+            "allow_async": true,
+            "autoescape": false,
+            "cache": false,
+            "strict_variables": false,
+            "debug": false,
+            "auto_reload": true,
+        });
+        app.set('views', path.join(path.dirname(__dirname), `public`, `views`));
+        app.set('view engine', 'twig');
+        app.set('view cache', false);
+        app.use(express.static(path.join(path.dirname(__dirname), "public")));
+        app.use(express.static(path.join(path.dirname(__dirname), "data")));
 
         app.use(async function (req, res, next) {
             res.render_data = {
@@ -48,13 +50,12 @@ class ExpressLoader {
                 "description": "Gestion simplifiée des contrats médicaux.",
                 "selected_menu": "store",
             }
-            if (req.url.includes("client")) return next();
             const token = req.cookies.token
             if (token) {
-                const cookies_data = await helper.decryptToken(token);
+                const cookies_data = await tokenHelper.decryptToken(token);
                 if (cookies_data.state) return next();
-                const user = await helper.findUserById(cookies_data.id_user);
-                if (!user) return next();
+                const user = await new User(cookies_data.id_user).getUser();
+                if (user.length < 1) return next();
                 res.render_data.user = user;
             }
             next();
@@ -81,13 +82,14 @@ class ExpressLoader {
             res.redirect("/store");
         });
 
+        app.get("/logout", function (req, res) {
+            res.clearCookie("token");
+            res.redirect("/");
+        });
+
         server.listen(process.env.PORT, () => {
             console.log(`[INFO] Server is running on port ${process.env.PORT}`);
         });
-    }
-
-    get Server() {
-        return server;
     }
 }
 

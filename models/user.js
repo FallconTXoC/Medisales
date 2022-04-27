@@ -9,11 +9,11 @@ class User {
     }
 
     async userExists() {
-        await new Promise((resolve, reject) => {
+        return await new Promise((resolve, reject) => {
             db.runPreparedQuery(`SELECT ID FROM Utilisateur WHERE ID = ?`, [this.username], (err, result) => {
                 if(err) return reject(err);
                 else {
-                    if(result[0].length > 0) return resolve(true);
+                    if(result[0]) return resolve(true)
                     else return resolve(false);
                 }
             })
@@ -21,19 +21,28 @@ class User {
     }
 
     async getUserPass() {
-        await new Promise((resolve, reject) => {
+        return await new Promise((resolve, reject) => {
             db.runPreparedQuery(`SELECT Passwd FROM Utilisateur WHERE ID = ?`, [this.username], (err, result) => {
                 if(err) return reject(err);
-                else return resolve(result);
+                else return resolve(result[0].Passwd);
             });
         })
     }
 
     async getNames() {
-        await new Promise((resolve, reject) => {
+        return await new Promise((resolve, reject) => {
             db.runPreparedQuery(`SELECT Nom, Prenom FROM Utilisateur WHERE ID = ?`, [this.username], (err, result) => {
                 if(err) return reject(err);
-                else return resolve(result);
+                else return resolve(result[0]);
+            })
+        })
+    }
+
+    async getUser() {
+        return await new Promise((resolve, reject) => {
+            db.runPreparedQuery(`SELECT ID, Nom, Prenom FROM Utilisateur WHERE ID = ?`, [this.username], (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result[0]);
             })
         })
     }
