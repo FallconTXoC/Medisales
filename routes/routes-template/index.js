@@ -11,9 +11,7 @@ const settings = require("../../controllers/settings");
 const stats = require("../../controllers/stats");
 const store = require("../../controllers/store");
 
-router.get('/store', middlewares["connections"].isConnected, cors(), function (req, res) {
-    console.log("hello")
-});
+router.get('/store', middlewares["connections"].isConnected, cors(), store.display);
 
 router.get('/login', cors(), login.display);
 

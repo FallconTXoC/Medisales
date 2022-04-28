@@ -20,23 +20,39 @@
 </head>
 <body>
     {% if disable.navbar is not defined %}
-        <div class="navbar">
-            <nav class="nav">
-                <div class="navlist">
-                    <a></a>
-                    <a></a>
-                    <a></a>
-                </div>
-            </nav>
-        </div>
+        <div class="app-content">
+            <div class="topnav">
+                <span class="medisales">MEDISales</span>
+            </div>
 
-        <div class="topnav"></div>
+            <div class="main-panel">
+                <div class="navbar">
+                    <nav class="nav">
+                        <div class="navlist">
+                            <a></a>
+                            <a></a>
+                            <a></a>
+                        </div>
+                    </nav>
+                </div>
+    
+                <main class="content">
+                    <div class="main-container">
+                        {% if content %}
+                            {% include content %}
+                        {% endif %}
+                    </div>
+                    <div class="notification-popup-container"></div>
+                </main>
+            </div>
+        </div>
+    {% else %}
+        <main class="content">
+            {% if content %}
+                {% include content %}
+            {% endif %}
+            <div class="notification-popup-container"></div>
+        </main>
     {% endif %}
-    <main class="content">
-        {% if content %}
-            {% include content %}
-        {% endif %}
-        <div class="notification-popup-container"></div>
-    </main>
 </body>
 </html>
