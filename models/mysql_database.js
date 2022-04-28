@@ -25,4 +25,20 @@ module.exports = {
             });
         });
     },
+
+    runQuery: function (query, params, callback) {
+        connection.getConnection(function(err, conn) {
+            if (err) console.log(err);
+            conn.execute(query, params, function (err, results, fields) {
+                if (err) {
+                    console.log(err);
+                    if (callback) callback(err, null);
+                    connection.releaseConnection(conn);
+                } else {
+                    if (callback) callback(null, results);
+                    connection.releaseConnection(conn);
+                }
+            });
+        });
+    }
 }
