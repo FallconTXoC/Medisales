@@ -36,97 +36,10 @@ class Products {
 
     async getProducts() {
         return await new Promise((resolve, reject) => {
-            console.log("querying")
             db.runQuery(`SELECT * FROM Produit`, (err, result) => {
-                console.log("result out")
                 if(err) return reject(err);
                 else return resolve(result);
             });
-        })
-    }
-
-    /**
-     * Function that sorts products based on different criterias.
-     * 
-     * Criterias are defined in an object containing all tables related
-     * to a product and specifying the values that need to be matched
-     * in each table, along with the keyword for the table, its name or
-     * link table name and the name of the primary key (of the relevant
-     * criteria).
-     * 
-     * @param {Object} data 
-     * @returns Array of products
-     */
-    async sortProducts(data) {
-        let query = `SELECT * FROM Produit `;
-        let params = [];
-        let optional_values = {};
-        let internalValues = [];
-
-        for(let table in data.tables) {
-            let tableData = data.tables[table];
-            if(tableData.values.length > 0) {
-                if(tableData.isInternal === true) internalValues.push(tableData)
-                else if(tableData.values.length > 1) {
-                    let suffix = 1;
-                    optional_values[tableData.name] = [];
-                    for(let value of tableData.values) {
-                        let keyword = tableData.keyword.concat(suffix);
-                        query += `INNER JOIN ?? ?? ON Produit.CodeProd = ??.CodeProd `;
-                        params.push(tableData.name, keyword, keyword);
-
-                        optional_values[tableData.name].push({keyword: keyword, propertyCode: tableData.propertyCode, value: value});
-                        suffix++;
-                    }
-                } else {
-                    query += `INNER JOIN ?? ON Produit.CodeProd = ??.CodeProd AND ??.?? = ? `;
-                    params.push(tableData.name, tableData.name, tableData.name, tableData.propertyCode, tableData.values[0]);
-                }
-            }
-        }
-
-        //Ajout des critères de tri multiples sur une même table
-        let table_count = 0;
-        for(let optional_table in optional_values) {
-            let value_count = 0;
-            if(table_count === 0) query += `WHERE `
-            else query += `AND `
-            for(let value of optional_values[optional_table]) {
-                if(value_count === 0) query += `(??.?? = ? `
-                else query += `AND ??.?? = ? `
-
-                params.push(value.keyword, value.propertyCode, value.value)
-                value_count++;
-            }
-            query += `) `
-            table_count++;
-        }
-
-        //Ajout des critères de tri contenu dans la table Produit
-        table_count = 0;
-        for(let internal_value of internalValues) {
-            if(optional_values.length === 0 && table_count === 0) query += `WHERE `
-            else query += `AND `
-
-            let value_count = 0;
-            if(internal_value.values.length > 1) {
-                for(let value of internal_value.values) {
-                    if(value_count === 0) query += `Produit.?? = ? `
-                    else query += `OR Produit.?? = ? `
-                    params.push(internal_value.propertyCode, value)
-                    value_count++;
-                }
-            } else {
-                query += `Produit.?? = ? `
-                params.push(internal_value.propertyCode, internal_value.values[0])
-            }
-        }
-
-        return await new Promise((resolve, reject) => {
-            db.runPreparedQuery(query, params, (err, result) => {
-                if(err) return reject(err);
-                else return resolve(result);
-            })
         })
     }
 

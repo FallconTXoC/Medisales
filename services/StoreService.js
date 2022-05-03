@@ -1,6 +1,8 @@
 const socketHelper = require("../utils/socket");
 const Products = require("../models/products");
 const ProductsInstance = new Products();
+const CommonQueries = require("../utils/common_queries");
+const CommonQueriesInstance = new CommonQueries();
 
 class StoreService {
     constructor() {
@@ -27,6 +29,10 @@ class StoreService {
         const voieAdmin = data.voieAdmin ?? [];
 
         const tablesData = {
+            mainTable: {
+                name: "Produit",
+                propertyCode: "CodeProd"
+            },
             tables: {
                 Symptome: {
                     name: "Prod_Usage",
@@ -66,7 +72,7 @@ class StoreService {
             }
         }
 
-        return await ProductsInstance.sortProducts(tablesData);
+        return await CommonQueriesInstance.sortObjects(tablesData);
     }
 
     async getProductInfo(idprod) {
