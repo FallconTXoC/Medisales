@@ -5,7 +5,7 @@ class Products {
 
     async productExists(codeprod) {
         return await new Promise((resolve, reject) => {
-            db.runPreparedQuery(`SELECT CodeProd FROM Produit WHERE CodeProd = ?`, [this.codeprod], (err, result) => {
+            db.runPreparedQuery(`SELECT CodeProd FROM Produit WHERE CodeProd = ?`, [codeprod], (err, result) => {
                 if(err) return reject(err);
                 else {
                     if(result[0]) return resolve(true)

@@ -3,6 +3,8 @@ const Contracts = require("../models/contract");
 const ContractsInstance = new Contracts();
 const CommonQueries = require("../utils/common_queries");
 const CommonQueriesInstance = new CommonQueries();
+const Client = require("../models/client");
+const ClientInstance = new Client();
 
 class ContractsService {
     constructor() {
@@ -22,11 +24,9 @@ class ContractsService {
     }
 
     async getSortedContracts(data) {
-        const symptomes = data.symptomes ?? [];
-        const principesActifs = data.principesActifs ?? [];
-        const maladies = data.maladies ?? [];
-        const forme = data.forme ?? [];
-        const voieAdmin = data.voieAdmin ?? [];
+        const dates = data.dates ?? [];
+        const clients = data.clients ?? [];
+        const produits = data.produits ?? [];
 
         const tablesData = {
             mainTable: {
@@ -52,7 +52,7 @@ class ContractsService {
                     name: "Contrat",
                     keyword: "c",
                     propertyCode: "CodeProd",
-                    values: clients,
+                    values: produits,
                     isInternal: true
                 },
             }
@@ -63,6 +63,33 @@ class ContractsService {
 
     async getContractInfo(idprod) {
         return await ContractsInstance.findByID(idprod)
+    }
+
+    async saveContract(data) {
+        //TODO : Générer un uid + traiter les données
+
+        const client = await ClientInstance.findByName(data.clientName);
+        data["clientID"] = client ? client.CodeClient : ""; // TODO : générer un uid
+        
+        const result = await ContractsInstance.saveContract(data);
+
+        return result ? true : {success: false, message: "Erreur interne"};
+    }
+
+    async updateContract(data) {
+        //TODO : traiter les données
+
+        const result = await ContractsInstance.updateContract(data);
+
+        return result ? true : {success: false, message: "Erreur interne"};
+    }
+
+    async deleteContract(id) {
+        let result;
+        if(await ContractsInstance.contractExists(id) === true) result = await ContractsInstance.deleteContract(id);
+        else return {success: false, message: "Le contrat n'existe pas"};
+
+        return result ? true : {success: false, message: "Erreur interne"};
     }
 }
 
