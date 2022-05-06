@@ -46,7 +46,7 @@ CREATE TABLE Utilisateur(
 #------------------------------------------------------------
 
 CREATE TABLE Client(
-        CodeClient Varchar (5) NOT NULL ,
+        CodeClient Varchar (25) NOT NULL ,
         Nom        Varchar (30) NOT NULL ,
         Type       Varchar (20) NOT NULL ,
         Mail       Varchar (100) NOT NULL ,
@@ -134,7 +134,7 @@ CREATE TABLE Produit(
 
 CREATE TABLE Contrat(
         ID                Varchar (20) NOT NULL ,
-        CodeClient        Varchar (5) NOT NULL ,
+        CodeClient        Varchar (25) NOT NULL ,
         CodeProd          Varchar (15) NOT NULL ,
         ID_Utilisateur    Varchar (20) NOT NULL ,
         Date              Date NOT NULL ,
