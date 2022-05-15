@@ -7,10 +7,7 @@ class Contract {
         return await new Promise((resolve, reject) => {
             db.runPreparedQuery(`SELECT ID FROM Contrat WHERE ID = ?`, [id], (err, result) => {
                 if(err) return reject(err);
-                else {
-                    if(result[0]) return resolve(true)
-                    else return resolve(false);
-                }
+                else return result[0] ? resolve(result[0]) : resolve(false);
             })
         })
     }
@@ -56,7 +53,7 @@ class Contract {
 
     async saveContract(data) {
         return await new Promise((resolve, reject) => {
-            db.runPreparedQuery(`INSERT INTO Contrat VALUES(?,?,?,?,?,?,?,?)`, [data.id, data.clientID, data.productID, data.date, data.qtt, data.dateFin, data.frequency], (err, result) => {
+            db.runPreparedQuery(`INSERT INTO Contrat VALUES(?,?,?,?,?,?,?,?)`, [data.id, data.clientID, data.productID, data.userID, data.date, data.qtt, data.dateFin, data.frequency], (err, result) => {
                 if(err) return reject(err);
                 else return resolve(true);
             })
@@ -65,7 +62,7 @@ class Contract {
 
     async updateContract(data) {
         return await new Promise((resolve, reject) => {
-            db.runPreparedQuery(`UPDATE Contrat SET CodeProd = ?, QTT = ?, DateFin = ?, Frequence = ?)`, [data.codeProd, data.qtt, data.endDate, data.frequency], (err, result) => {
+            db.runPreparedQuery(`UPDATE Contrat SET CodeProd = ?, QTT = ?, DateFin = ?, Frequence = ? WHERE ID = ?)`, [data.codeProd, data.qtt, data.endDate, data.frequency, data.id], (err, result) => {
                 if(err) return reject(err);
                 else return resolve(true);
             })

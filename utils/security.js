@@ -24,7 +24,7 @@ module.exports = {
     regex: function() {
         let regex = {};
 
-        regex["nameRegex"] = /^[a-zA-Z ]+$/i;
+        regex["stdStrRegex"] = /^[a-zA-Z ]+$/i;
         regex["idRegex"] = /^[a-zA-Z0-9]+$/i;
         regex["postalAddressRegex"] = /\d+(?:\s?[a-zA-Z]+)+$/i;
         regex["zipcodeRegex"] = /^[0-9]{5}$/i;
