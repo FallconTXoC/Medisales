@@ -56,7 +56,10 @@ class ExpressLoader {
                 if (cookies_data.state) return next();
                 const user = await new User(cookies_data.id_user).getUser();
                 if (user.length < 1) return next();
-                res.render_data.user = user;
+                res.render_data.user = {
+                    id: cookies_data.id_user,
+                    name: user.Prenom + " " + user.Nom,
+                };
             }
             next();
         })
