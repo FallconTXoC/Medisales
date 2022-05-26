@@ -22,10 +22,11 @@
         height: 100%;
 
         .panel-content {
+            position: relative;
             display: flex;
             flex-flow: column nowrap;
             justify-content: space-around;
-            align-items: flex-start;
+            align-items: center;
             width: calc(100% - 2.8vw);
             height: calc(100% - 2.3vw);
 
@@ -143,6 +144,11 @@
                                     }
                                 }
                             }
+
+                            label {
+                                margin-top: -0.09vw;
+                                font-size: 0.85vw;
+                            }
                         }
                     }
                 }
@@ -155,6 +161,31 @@
                     margin-bottom: 0.6vw;
                 }
             }
+
+            .submit-filters {
+                position: absolute;
+                top: 45%;
+                right: -26.5%;
+                width: 2.6vw;
+                height: 2.6vw;
+
+                background: #c0c0cc;
+                border: none;
+                outline: 0.55vw solid #f0f5fa;
+                border-radius: 30px;
+
+                cursor: pointer;
+
+                color: #021212;
+                font-size: 1vw;
+                font-family: Lato;
+                font-weight: 600;
+
+                &:hover {
+                    background: #15C5CE;
+                    outline: 0.8vw solid #f0f5fa;
+                }
+            }
         }
     }
 
@@ -165,6 +196,7 @@
         height: 100%;
 
         .panel-content {
+            position: relative;
             display: flex;
             flex-flow: column nowrap;
             align-items: center;
@@ -273,11 +305,40 @@
                     justify-content: flex-start;
 
                     .product {
+                        width: 11.5vw;
+                        height: 12.5vw;
+                        display: flex;
+                        flex-flow: column nowrap;
+                        justify-content: center;
+                        align-items: center;
+
+                        background: #FCFCFC;
+                        border: 1px solid #F0F0F0;
+                        border-radius: 15px;
+                        margin-right: 1.8vw;
+                        margin-bottom: 1.8vw;
+
+                        cursor: pointer;
+
                         .content {
+                            height: 93%;
+                            width: 90%;
+                            display: flex;
+                            flex-flow: column nowrap;
+                            justify-content: space-between;
+                            align-items: center;
+
+                            font-family: Roboto;
+
                             .checkbox-container {
+                                width: 100%;
+                                display: flex;
+                                flex-flow: row nowrap;
+                                justify-content: flex-end;
+
                                 input {
-                                    width: 0.75vw;
-                                    height: 0.75vw;
+                                    width: 0.85vw;
+                                    height: 0.85vw;
                                     background-color: white;
                                     border-radius: 50%;
                                     vertical-align: middle;
@@ -289,12 +350,63 @@
 
                                     &:checked {
                                         background-color: #6CD9B1;
-                                        border: 1.5px solid white;
+                                        border: 0.15vw solid white;
                                     }
                                 }
                             }
+                            p {
+                                margin: 0;
+                                font-size: 1vw;
+                                font-weight: 400;
+
+                                &.prod-price {
+                                    font-weight: 600;
+                                    font-size: 0.85vw;
+                                }
+                            }
+                            img {
+                                width: 100%;
+                                height: 55%;
+                                object-fit: contain;
+                                font-size: 1vw;
+                            }
+                        }
+
+                        &.active {
+                            box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.05);
+                            background: #D7ECFF;
+                            border: 1px solid #D7ECFF;
                         }
                     }
+                }
+            }
+
+            .contract-button {
+                position: absolute;
+                top: 89%;
+                right: 4%;
+
+                width: 9.5vw;
+                height: 2.5vw;
+
+                background: #53ADFF;
+                box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+                border: 1px solid #53ADFF;
+                border-radius: 30px;
+
+                cursor: pointer;
+
+                color: white;
+                font-family: Roboto;
+                font-weight: 500;
+                font-size: 1vw;
+
+                &:hover {
+                    background: lighten(#53ADFF, 5%);
+                    border: 1px solid lighten(#53ADFF, 5%);
+                }
+                &.hidden {
+                    visibility: hidden;
                 }
             }
         }
