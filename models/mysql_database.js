@@ -6,37 +6,25 @@ let connectionInfo = {
     password: process.env.DB_PASSWORD,
     database: "Medisales"
 }
-let connection = mysql.createPool(connectionInfo);
+let pool = mysql.createPool(connectionInfo);
 
 module.exports = {
     runPreparedQuery: function (query, params, callback) {
-        connection.getConnection(function(err, conn) {
-            if (err) console.log(err);
-            let finalQuery = mysql.format(query, params)
-            conn.query(finalQuery, function (err, results, fields) {
-                if (err) {
-                    console.log(err);
-                    if (callback) callback(err, null);
-                    connection.releaseConnection(conn);
-                } else {
-                    if (callback) callback(null, results);
-                    connection.releaseConnection(conn);
-                }
-            });
-        });
+        let finalQuery = mysql.format(query, params)
+        this.runQuery(finalQuery, callback);
     },
 
-    runQuery: function (query, params, callback) {
-        connection.getConnection(function(err, conn) {
+    runQuery: function (query, callback) {
+        pool.getConnection(function(err, conn) {
             if (err) console.log(err);
-            conn.execute(query, params, function (err, results, fields) {
+            conn.query(query, function (err, results, fields) {
                 if (err) {
                     console.log(err);
                     if (callback) callback(err, null);
-                    connection.releaseConnection(conn);
+                    conn.release();
                 } else {
                     if (callback) callback(null, results);
-                    connection.releaseConnection(conn);
+                    conn.release();
                 }
             });
         });

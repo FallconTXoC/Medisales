@@ -45,14 +45,14 @@ class CommonQueries {
                     for(let value of criteriaData.values) {
                         let keyword = criteriaData.keyword.concat(suffix);
                         query += `INNER JOIN ?? ?? ON ??.?? = ??.?? `;
-                        params.push(criteriaData.table_name, keyword, data.mainTable.table_name, data.mainTable.propertyCode, keyword, data.mainTable.propertyCode);
+                        params.push(criteriaData.table_name, keyword, data.mainTable.name, data.mainTable.propertyCode, keyword, data.mainTable.propertyCode);
     
                         optional_values[criteriaData.table_name].push({keyword: keyword, propertyCode: criteriaData.propertyCode, value: value});
                         suffix++;
                     }
                 } else {
                     query += `INNER JOIN ?? ON ??.?? = ??.?? AND ??.?? = ? `;
-                    params.push(criteriaData.table_name, data.mainTable.table_name, data.mainTable.propertyCode, criteriaData.table_name, data.mainTable.propertyCode, criteriaData.table_name, criteriaData.propertyCode, criteriaData.values[0]);
+                    params.push(criteriaData.table_name, data.mainTable.name, data.mainTable.propertyCode, criteriaData.table_name, data.mainTable.propertyCode, criteriaData.table_name, criteriaData.propertyCode, criteriaData.values[0]);
                 }
             }
         }
@@ -77,7 +77,7 @@ class CommonQueries {
         //Ajout des critères de tri contenu dans la table principale
         table_count = 0;
         for(let internal_value of internalValues) {
-            if(optional_values.length === 0 && table_count === 0) query += `WHERE `
+            if(Object.keys(optional_values).length === 0 && table_count === 0) query += `WHERE `
             else query += `AND `
     
             let value_count = 0;
@@ -85,13 +85,14 @@ class CommonQueries {
                 for(let value of internal_value.values) {
                     if(value_count === 0) query += `??.?? = ? `
                     else query += `OR ??.?? = ? `
-                    params.push(data.mainTable.name, internal_value.propertyCode, value)
+                    params.push(data.mainTable.name, internal_value.propertyCode, value);
                     value_count++;
                 }
             } else {
-                query += `??.?? = ? `
-                params.push(data.mainTable.name, internal_value.propertyCode, internal_value.values[0])
+                query += `??.?? = ? `;
+                params.push(data.mainTable.name, internal_value.propertyCode, internal_value.values[0]);
             }
+            table_count++;
         }
     
         return await new Promise((resolve, reject) => {
