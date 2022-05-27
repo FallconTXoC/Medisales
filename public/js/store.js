@@ -1,3 +1,4 @@
+import NotificationPopup from './notification-popup.js';
 const socket = io();
 
 let selected_products = [];
@@ -40,6 +41,7 @@ $('.submit-filters').click(() => {
     }
     socket.emit("getSortedProducts", data);
 })
+$('.contract-button').click(() => openContractModal());
 
 function productTemplate(product) {
     const productHTML = `<div class="product" id="prod_${product.CodeProd}" prod-code=${product.CodeProd}>
@@ -53,6 +55,161 @@ function productTemplate(product) {
                             </div>
                         </div>`
     return productHTML;
+}
+
+function productModalTemplate(products) {
+    console.log(products);
+    let productModal = `<script type="text/template" id="modal-products-template">
+                            <div class="bbm-modal__topbar">
+                                <h3 class="bbm-modal__title">Création du contrat</h3>
+                            </div>
+                            <div class="bbm-modal__section">`
+
+    products.forEach((product) => {
+        productModal += `<div class="prod-section">
+                            <h4 class="prod-title">${product.Libelle}</h4>
+                            <div class="input-container">
+                                <input type="number" class="modal-input" id="qtt_${product.CodeProd}" name="qtt_${product.CodeProd}">
+                                <label for="qtt_${product.CodeProd}">Quantité</label>
+                            </div>
+                            <div class="input-container">
+                                <input type="number" class="modal-input" id="freq_${product.CodeProd}" name="freq_${product.CodeProd}">
+                                <label for="freq_${product.CodeProd}">Nombre de livraisons par mois</label>
+                            </div>
+                            <div class="input-container">
+                                <input type="number" class="modal-input" id="duree_${product.CodeProd}" name="duree_${product.CodeProd}">
+                                <label for="duree_${product.CodeProd}">Durée en mois</label>
+                            </div>
+                        </div>`
+    })
+    productModal += `</div>
+                    <div class="bbm-modal__bottombar">
+                        <a href="#" class="bbm-button previous inactive">Précédent</a>
+                        <a href="#" class="bbm-button next">Suivant</a>
+                    </div>
+                </script>`
+
+    return productModal;
+}
+
+async function addContractModal() {
+    let products = await new Promise((resolve, reject) => {
+        let prods = [];
+        selected_products.forEach((product, index, array) => {
+            $.post("/api/store/getProduct", {id: product})
+            .done((productData) => {
+                prods.push(productData);
+                console.log(prods)
+            })
+            .fail(function(xhr, status, err) {
+                let errorMessage;
+                try {
+                    if(xhr.responseJSON.error.message) {
+                        errorMessage = xhr.responseJSON.error.message
+                    } else {
+                        errorMessage = xhr.responseJSON.error;
+                    }
+                } catch (e) {
+                    errorMessage = "undefined error"
+                }
+                if(errorMessage) {
+                    new NotificationPopup(`Erreur`,`Echec de l'enregistrement`, errorMessage, `error`).show();
+                }
+            })
+            if (index === array.length -1) resolve(prods);
+        })
+    })
+
+    const productsTemplate = productModalTemplate(products);
+    const contractModal = `<script type="text/template" id="modal-template">
+                                <div class="my-container"></div>
+                            </script>
+
+                            ${productsTemplate}
+
+                            <script type="text/template" id="modal-client-template">
+                                <div class="bbm-modal__topbar">
+                                <h3 class="bbm-modal__title">Wizard example - step 2</h3>
+                                </div>
+                                <div class="bbm-modal__section">
+                                <p>This is the second step of the wizard.</p>
+                                </div>
+                                <div class="bbm-modal__bottombar">
+                                <a href="#" class="bbm-button previous">Previous</a>
+                                <a href="#" class="bbm-button next">Next</a>
+                                </div>
+                            </script>
+
+                            <script type="text/template" id="modal-sign-template">
+                                <div class="bbm-modal__topbar">
+                                <h3 class="bbm-modal__title">Wizard example - step 2</h3>
+                                </div>
+                                <div class="bbm-modal__section">
+                                <p>This is the second step of the wizard.</p>
+                                </div>
+                                <div class="bbm-modal__bottombar">
+                                <a href="#" class="bbm-button previous">Previous</a>
+                                <a href="#" class="bbm-button next">Next</a>
+                                </div>
+                            </script>
+
+                            <script type="text/template" id="modal-summary-template">
+                                <div class="bbm-modal__topbar">
+                                <h3 class="bbm-modal__title">Wizard example - step 3</h3>
+                                </div>
+                                <div class="bbm-modal__section">
+                                <p>And finally, the last step!</p>
+                                </div>
+                                <div class="bbm-modal__bottombar">
+                                <a href="#" class="bbm-button previous">Previous</a>
+                                <a href="#" class="bbm-button done">Done</a>
+                                </div>
+                            </script>`
+    $('.app-content').append(contractModal);
+}
+
+async function openContractModal() {
+    await addContractModal();
+    const Modal = Backbone.Modal.extend({
+        template: _.template($('#modal-template').html()),
+    
+        viewContainer: '.my-container',
+        submitEl: '.done',
+        cancelEl: '.cancel',
+    
+        views: {
+          'click #step1': {
+            view: _.template($('#modal-products-template').html())
+          },
+          'click #step2': {
+            view: _.template($('#modal-client-template').html())
+          },
+          'click #step3': {
+            view: _.template($('#modal-sign-template').html())
+          },
+          'click #step4': {
+            view: _.template($('#modal-summary-template').html())
+          }
+        },
+    
+        events: {
+          'click .previous': 'previousStep',
+          'click .next': 'nextStep'
+        },
+    
+        previousStep: function(e) {
+          e.preventDefault();
+          this.previous();
+        },
+    
+        nextStep: function(e) {
+          e.preventDefault();
+          this.next();
+        }
+    });
+
+    const modalView = new Modal();
+    $('.app').html(modalView.render().el);
 }
 
 function bindProductsEvent() {

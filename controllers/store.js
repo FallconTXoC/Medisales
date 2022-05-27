@@ -2,7 +2,7 @@ const StoreService = require('../services/StoreService');
 const StoreServiceInstance = new StoreService();
 let isSocketInitialized = false;
 
-module.exports = { display, showProduct };
+module.exports = { display, showProduct, getProduct };
 
 async function display(req, res) {
     if(isSocketInitialized === false) {
@@ -32,4 +32,10 @@ async function showProduct(req, res) {
     res.render_data.productInfo = await StoreServiceInstance.getProductInfo(req.query.idprod);
 
     res.render("main.twig", res.render_data);
+}
+
+async function getProduct(req, res) {
+    const result = await StoreServiceInstance.getProduct(req.body.id);
+
+    return (result !== null && result !== undefined) ? res.status(200).json({success: true, product: result}) : res.status(400).json({success: false, message: "Produit introuvable"});
 }

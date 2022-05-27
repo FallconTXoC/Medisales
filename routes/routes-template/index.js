@@ -20,6 +20,7 @@ router.get('/login', cors(), login.display);
 
 router.get('/store', middlewares["connections"].isConnected, cors(), store.display);
 router.get('/store/product', middlewares["connections"].isConnected, cors(), store.showProduct);
+router.post('/api/store/getProduct', middlewares["connections"].isConnected, cors(), store.getProduct);
 
 
 router.get('/contracts', middlewares["connections"].isConnected, cors(), contracts.display);

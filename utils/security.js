@@ -17,7 +17,7 @@ module.exports = {
     },
 
     validateString: function (string, regex) {
-        let sanitized_string = escapeHtml(string);
+        let sanitized_string = this.escapeHtml(string);
         return (string && sanitized_string.match(regex)) ? sanitized_string : false;
     },
 

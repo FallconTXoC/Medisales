@@ -1,9 +1,12 @@
 const socketHelper = require("../utils/socket");
+
 const Products = require("../models/products");
 const ProductsInstance = new Products();
 const CommonQueries = require("../utils/common_queries");
 const CommonQueriesInstance = new CommonQueries();
 
+const securityUtils = require("../utils/security");
+const regex = securityUtils.regex();
 class StoreService {
     constructor() {
     }
@@ -30,6 +33,13 @@ class StoreService {
 
     async findProductsByName(name) {
         return await ProductsInstance.findByName(name);
+    }
+
+    async getProduct(id) {
+        const productID = securityUtils.validateString(id, regex.idRegex);
+        if(productID === false) return {success: false, message: "Mauvais ID de produit"};
+
+        return await ProductsInstance.findByID(id);
     }
 
     async getSortedProducts(data) {
