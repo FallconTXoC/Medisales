@@ -19,13 +19,13 @@ router.get('/login', cors(), login.display);
 
 
 router.get('/store', middlewares["connections"].isConnected, cors(), store.display);
-router.get('/store/product', middlewares["connections"].isConnected, cors(), store.showProduct);
+router.get('/store/product/:id', middlewares["connections"].isConnected, cors(), store.showProduct);
 router.post('/api/store/getProduct', middlewares["connections"].isConnected, cors(), store.getProduct);
 
 
 router.get('/contracts', middlewares["connections"].isConnected, cors(), contracts.display);
-router.get('/contracts/contract', middlewares["connections"].isConnected, cors(), contracts.showContract);
-//router.post('/contracts/new', middlewares["connections"].isConnected, cors(), contracts.createContract); ------ À ajouter dans un modal multi pages
+router.get('/contracts/contract/:id', middlewares["connections"].isConnected, cors(), contracts.showContract);
+router.get('/contracts/getClients', middlewares["connections"].isConnected, cors(), contracts.getClients);
 router.post('/contracts/save', middlewares["connections"].isConnected, cors(), contracts.saveContract);
 router.post('/contracts/update', middlewares["connections"].isConnected, cors(), contracts.updateContract);
 router.post('/contracts/delete', middlewares["connections"].isConnected, cors(), contracts.deleteContract);

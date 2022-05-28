@@ -27,6 +27,10 @@ class ContractsService {
         return await ContractsInstance.getContracts();
     }
 
+    async getClients() {
+        return await ContractsInstance.getClients();
+    }
+
     async getUserContracts(userID) {
         return await ContractsInstance.getContractsByUserID(userID);
     }

@@ -51,6 +51,16 @@ class Contract {
         })
     }
 
+    async getClients() {
+        return await new Promise((resolve, reject) => {
+            console.log("querying")
+            db.runQuery(`SELECT * FROM Client`, (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result);
+            });
+        })
+    }
+
     async saveContract(data) {
         return await new Promise((resolve, reject) => {
             db.runPreparedQuery(`INSERT INTO Contrat VALUES(?,?,?,?,?,?,?,?)`, [data.id, data.clientID, data.productID, data.userID, data.date, data.qtt, data.dateFin, data.frequency], (err, result) => {
