@@ -161,7 +161,7 @@ function createContract(modalBox, productID = "") {
                         submitDone = true;
                         let exists = false;
                         if($(`#idclient`).val() !== "") exists = true;
-    
+
                         const clientData = {
                             exists: exists,
                             idclient: $(`#idclient`).val(),
@@ -172,15 +172,13 @@ function createContract(modalBox, productID = "") {
                             city: $(`#city`).val(),
                             mail: $(`#mail`).val(),
                         }
-    
+
                         for(let [key, value] of Object.entries(productsInfo)) {
                             const contractData = {
                                 product: value,
                                 client: clientData
                             }
-    
-                            console.log(contractData)
-    
+
                             $.post(`/contracts/save`, contractData)
                             .done(function(data) {
                                 new NotificationPopup(`Succès`,`Succès de l'enregistrement`, "Le contrat a été enregistré avec succès", `success`).show();
