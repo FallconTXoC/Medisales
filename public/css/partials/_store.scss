@@ -501,6 +501,7 @@
 	box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	background-clip: padding-box;
+    font-family: Lato;
 }
 
 .product, .client {
@@ -517,6 +518,7 @@
 .modal-box header h4,
 .modal-box .modal-header h3,
 .modal-box .modal-header h4 {
+    font-family: Montserrat;
 	margin: 0;
 }
 
@@ -552,6 +554,49 @@ a.close {
 	right: 3.2%;
 	text-decoration: none;
 	color: #bbb;
+}
+
+.js-modal-no {
+    font-size: 1.3vw;
+    text-decoration: none;
+    margin-right: 1vw;
+	color: #bbb;
+
+    &:hover {
+        color: #fd1e1e;
+    }
+}
+
+.formSubmit {
+    display: inline-block;
+    background: #5193ff;
+    height: 2.8vw;
+    width: 6.2vw;
+    margin: 0;
+    text-align: center;
+    cursor: pointer;
+
+    border: 1px solid;
+    border-top-color: currentcolor;
+    border-right-color: currentcolor;
+    border-bottom-color: currentcolor;
+    border-left-color: currentcolor;
+    border-radius: 5px;
+    border-color: #5193ff;
+
+    color: white;
+    text-align: center;
+    font-size: 1.3vw;
+    &:hover:enabled {
+        background: rgb(94, 169, 255);
+    }
+
+    &:disabled {
+        background: #bbb;
+        border-color: #bbb;
+        color: rgb(56, 56, 56);
+        cursor: not-allowed;
+    }
 }
 
 a.close:hover {
