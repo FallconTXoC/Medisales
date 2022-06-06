@@ -3,7 +3,7 @@ const ContractsServiceInstance = new ContractsService();
 const tokenHelper = require(`../utils/token`);
 let isSocketInitialized = false;
 
-module.exports = { display, showContract, saveContract, updateContract, deleteContract, getClients };
+module.exports = { display, showContract, saveContract, updateContract, deleteContract, getClients, getContracts, getClient };
 
 async function display(req, res) {
     if(isSocketInitialized === false) {
@@ -43,17 +43,31 @@ async function showContract(req, res) {
         defer: true
     })
     res.render_data.content = "contract_page.twig";
-    res.render_data.contractInfo = await ContractsServiceInstance.getContractInfo(req.query.idcontract);
 
     res.render("main.twig", res.render_data);
 }
 
 async function getClients(req, res) {
     const result = await ContractsServiceInstance.getClients();
-    console.log(result);
 
     return (result !== null && result !== undefined)
         ? res.status(200).json({success: true, clients: result})
+        : res.status(400).json({success: false, error: result.message});
+}
+
+async function getContracts(req, res) {
+    const result = await ContractsServiceInstance.getContracts();
+
+    return (result !== null && result !== undefined)
+        ? res.status(200).json({success: true, contracts: result})
+        : res.status(400).json({success: false, error: result.message});
+}
+
+async function getClient(req, res) {
+    const result = await ContractsServiceInstance.getClientByID(req.params.id, true);
+
+    return (result !== null && result !== undefined)
+        ? res.status(200).json({success: true, client: result})
         : res.status(400).json({success: false, error: result.message});
 }
 

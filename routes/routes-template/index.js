@@ -20,12 +20,14 @@ router.get('/login', cors(), login.display);
 
 router.get('/store', middlewares["connections"].isConnected, cors(), store.display);
 router.get('/store/product/:id', middlewares["connections"].isConnected, cors(), store.showProduct);
-router.post('/api/store/getProduct', middlewares["connections"].isConnected, cors(), store.getProduct);
+router.get('/store/getProduct/:id', middlewares["connections"].isConnected, cors(), store.getProduct);
 
 
 router.get('/contracts', middlewares["connections"].isConnected, cors(), contracts.display);
+router.get('/contracts/getContracts', middlewares["connections"].isConnected, cors(), contracts.getContracts);
 router.get('/contracts/contract/:id', middlewares["connections"].isConnected, cors(), contracts.showContract);
 router.get('/contracts/getClients', middlewares["connections"].isConnected, cors(), contracts.getClients);
+router.get('/contracts/getClient/:id', middlewares["connections"].isConnected, cors(), contracts.getClient);
 router.post('/contracts/save', middlewares["connections"].isConnected, cors(), contracts.saveContract);
 router.post('/contracts/update', middlewares["connections"].isConnected, cors(), contracts.updateContract);
 router.post('/contracts/delete', middlewares["connections"].isConnected, cors(), contracts.deleteContract);

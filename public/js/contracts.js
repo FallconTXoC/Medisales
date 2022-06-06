@@ -1,20 +1,177 @@
+const actionsButtons = function(cell, formatterParams){
+    let buttons = `<div class="buttons-container">
+                        <a href="#" class="edit-contract" contractID=${cell.getValue()}><i class="fa-regular fa-pen-to-square"></i></a>
+                        <a href="#" class="delete-contract" contractID=${cell.getValue()}><i class="fa-regular fa-trash-can"></i></a>
+                    </div>`;
 
-var printIcon = function(cell, formatterParams){ //plain text value
-    return "<i class='fa fa-print'></i>";
+    return buttons;
 };
+const frequency = function(cell, formatterParams){
+    return (cell.getValue > 1) ? `${cell.getValue()} livraisons/mois` : `${cell.getValue()} livraison/mois`;
+}
+let notifier = new AWN();
+let contracts = {}
+let tableData = [];
+let contractID = "";
+let contractToDelete = "";
 
-//Build Tabulator
-var table = new Tabulator("#example-table", {
+let table = new Tabulator("#contracts-table", {
     layout:"fitColumns",
     columns:[
-    {title:"Button", field:"selection", width:70, headerSort: false},
-    {title:"ID", field:"progress", hozAlign:"right", sorter:"number"},
-    {title:"Nom client", field:"gender"},
-    {title:"Produit", field:"col"},
-    {title:"Signature", field:"dob", hozAlign:"center", sorter:"date"},
-    {title:"Fin de contrat", field:"car", hozAlign:"center", headerSort: false},
-    {title:"Quantité", field:"progress", hozAlign:"right", sorter:"number"},
-    {title:"Fréquence", field:"progress", hozAlign:"right", sorter:"number"},
-    {title:"Action", field:"selection", width:70, headerSort: false},
+        {formatter:"rowSelection", titleFormatter:"rowSelection", align:"center", width:70, headerSort:false},
+        {title:"Nom client", field:"clientName"},
+        {title:"Produit", field:"prodName"},
+        {title:"Signature", field:"dateSignature", hozAlign:"left", sorter:"date"},
+        {title:"Fin de contrat", field:"dateFinContrat", hozAlign:"left", sorter:"date"},
+        {title:"Quantité", field:"qtt", hozAlign:"left", sorter:"number"},
+        {formatter: frequency, title:"Fréquence", field:"freq", hozAlign:"left", sorter:"number"},
+        {formatter: actionsButtons, title:"", field:"actions", hozAlign:"center", width:150, headerSort: false},
     ],
 });
+
+setupModal();
+await getContracts();
+
+async function getContracts() {
+    contracts = (await (await fetch('/contracts/getContracts')).json()).contracts;
+
+    for (let contract in contracts) {
+        let contract_data = contracts[contract];
+
+        let clientData = (await (await fetch(`/contracts/getClient/${contract_data.CodeClient}`)).json()).client;
+        let productData = (await (await fetch(`/store/getProduct/${contract_data.CodeProd}`)).json()).product;
+
+        let contractTableData = {
+            id: contract_data.ID,
+            contractID: contract_data.ID,
+            clientName: clientData.Nom,
+            prodName: productData.Libelle,
+            dateSignature: new Date(contract_data.Date).toLocaleDateString("fr"),
+            dateFinContrat: new Date(contract_data.DateFin).toLocaleDateString("fr"),
+            qtt: parseInt(contract_data.QTT),
+            freq: parseInt(contract_data.Frequence),
+            actions: contract_data.ID
+        }
+
+        tableData.push(contractTableData);
+    }
+
+    table.setData(tableData)
+    .then(() => {
+        $(".edit-contract").on("click", (e) => {
+            contractID = ($(e.target).closest("a")).attr("contractID");
+            editContract();
+        })
+        $('#dateFin').prop("min", new Date().toISOString().split('T')[0]);
+        $(".delete-contract").on("click", (e) => {
+            contractToDelete = ($(e.target).closest("a")).attr("contractID");
+
+            let onOk = () => {
+                $.post('/contracts/delete', {id: contractToDelete})
+                .done(() => {
+                    notifier.success("Le contrat a été supprimé avec succès");
+                    tableData = [];
+                    getContracts();
+                })
+                .fail(function(xhr, status, err) {
+                    let errorMessage;
+                    try {
+                        if(xhr.responseJSON.error.message) {
+                            errorMessage = xhr.responseJSON.error.message
+                        } else {
+                            errorMessage = xhr.responseJSON.error;
+                        }
+                    } catch (e) {
+                        errorMessage = "undefined error"
+                    }
+                    if(errorMessage) {
+                        notifier.alert(errorMessage);
+                        submitDone = false;
+                    }
+                })
+            }
+            
+            let onCancel = () => {
+                contractToDelete = "";
+            };
+            notifier.confirm(
+                "Êtes-vous sûr de vouloir supprimer ce contrat ?",
+                onOk,
+                onCancel,
+                {
+                    labels: {
+                        confirm: "Attention",
+                        confirmOk: "Oui",
+                        confirmCancel: "Annuler"
+                    }
+                }
+            )
+        })
+    })
+}
+
+let appendthis = "<div class='js-modal-close modal-overlay'></div>";
+
+function checkModalInputs() {
+    let disabled = false;
+    $('.contract-modal-input').each((i, obj) => { if(obj.value === "") disabled = true; })
+    $('#modify_contract').prop("disabled", disabled);
+}
+
+function editContract() {
+    $("body").append(appendthis);
+    $(".modal-overlay").fadeTo(200, 0.7);
+    $("#contract-modal").fadeIn();
+}
+
+function setupModal() {
+    $(`#modify_contract`).on("click", (e) => {
+        console.log("click")
+        const contractData = {
+            id: contractID,
+            qtt: $(`#qtt`).val(),
+            frequency: $(`#freq`).val(),
+            dateFin: $(`#dateFin`).val(),
+        }
+
+        $.post(`/contracts/update`, contractData)
+        .done(function(data) {
+            notifier.success("Le contrat a été mis à jour avec succès");
+            contractID = "";
+            tableData = [];
+            getContracts();
+        })
+        .fail(function(xhr, status, err) {
+            let errorMessage;
+            try {
+                if(xhr.responseJSON.error.message) {
+                    errorMessage = xhr.responseJSON.error.message
+                } else {
+                    errorMessage = xhr.responseJSON.error;
+                }
+            } catch (e) {
+                errorMessage = "undefined error"
+            }
+            if(errorMessage) {
+                notifier.alert(errorMessage);
+                submitDone = false;
+            }
+        })
+
+        $(".modal-box, .modal-overlay").fadeOut(100, function() {
+            $(".modal-overlay").remove();
+            $(this).trigger('reset');
+        });
+    })
+    $(".js-modal-no").click(function() {
+        $(".modal-box, .modal-overlay").fadeOut(100, function() {
+            $(".modal-overlay").remove();
+        });
+    })
+
+    $(".js-modal-close, .modal-overlay").click(function() {
+        $(".modal-box, .modal-overlay").fadeOut(100, function() {
+            $(".modal-overlay").remove();
+        });
+    });
+}
