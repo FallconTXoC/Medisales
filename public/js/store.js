@@ -178,11 +178,12 @@ function initModals() {
             select: function(event, ui) {
                 $("#libelle").val(ui.item.nom);
                 $("#idclient").val(ui.item.id);
-                $("#typeclient").val(ui.item.type);
+                $("#type").val(ui.item.type);
                 $("#street").val(ui.item.street);
                 $("#zipcode").val(ui.item.postcode);
                 $("#city").val(ui.item.city);
                 $("#mail").val(ui.item.mail);
+                $('#add_client').prop("disabled", false);
                 return false;
             }
         });
@@ -204,6 +205,8 @@ function initModals() {
                     mail: $(`#mail`).val(),
                 }
 
+                console.log(clientData);
+
                 for(let [key, value] of Object.entries(productsInfo)) {
                     const contractData = {
                         product: value,
@@ -214,6 +217,7 @@ function initModals() {
                     .done(function(data) {
                         notifier.success("Le contrat a été enregistré avec succès");
                         productID = "";
+                        submitDone = false;
                         $(".modal-box, .modal-overlay").fadeOut(100, function() {
                             $(".modal-overlay").remove();
                         });

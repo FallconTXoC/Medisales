@@ -31,6 +31,7 @@ router.get('/contracts/getClient/:id', middlewares["connections"].isConnected, c
 router.post('/contracts/save', middlewares["connections"].isConnected, cors(), contracts.saveContract);
 router.post('/contracts/update', middlewares["connections"].isConnected, cors(), contracts.updateContract);
 router.post('/contracts/delete', middlewares["connections"].isConnected, cors(), contracts.deleteContract);
+router.post('/contracts/deleteContracts', middlewares["connections"].isConnected, cors(), contracts.deleteContracts);
 
 router.get('/statistics', middlewares["connections"].isConnected, cors(), stats.display);
 router.get('/statistics/getWeekContracts', middlewares["connections"].isConnected, cors(), stats.getWeekContracts);

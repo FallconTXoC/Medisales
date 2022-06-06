@@ -153,9 +153,23 @@ class ContractsService {
         return result ? true : {success: false, message: "Erreur interne"};
     }
 
+    async deleteContracts(contracts) {
+        let result;
+
+        for(let contract in contracts) {
+            let contractID = contracts[contract].contractID;
+            if(await ContractsInstance.contractExists(contractID) !== false) result = await ContractsInstance.deleteContract(contractID);
+            else return {success: false, message: "Le contrat n'existe pas"};
+
+            if(!result) return {success: false, message: "Erreur interne"};
+        }
+
+        return result ? true : {success: false, message: "Erreur interne"};
+    }
+
     async saveClient(clientData) {
         let clientID;
-        if(clientData.exists === true) {
+        if(clientData.exists === 'true') {
             clientID = securityUtils.validateString(clientData.id, regex.idRegex);
             if(clientID === false || await ClientInstance.findByID(clientID, false) !== true) 
                 return {success:false, message: "Mauvais ID client"};
