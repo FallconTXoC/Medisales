@@ -116,20 +116,20 @@ class ContractsService {
 
         const contract = await ContractsInstance.findByID(contractID);
 
-        console.log(contract)
+        console.log(data)
 
-        let qtt = data.qtt;
-        if(qtt === '') qtt = contract.QTT;
+        let qtt = parseInt(data.qtt);
+        if(data.qtt === '') qtt = contract.QTT;
         else if(!(Number.isInteger(qtt) && qtt > 0)) 
             return {success: false, message: "Mauvaise quantité"};
 
-        let contractDateFin = data.dateFin;
+        let contractDateFin = new Date(data.dateFin);
         if(contractDateFin === '') contractDateFin = contract.DateFin;
         else if(Object.prototype.toString.call(contractDateFin) !== '[object Date]')
             return {success: false, message: "Mauvaise date de fin de contrat"};
 
-        let frequency = data.frequency;
-        if(frequency === '') frequency = contract.Frequence;
+        let frequency = parseInt(data.frequency);
+        if(data.frequency === '') frequency = contract.Frequence;
         else if(!(Number.isInteger(frequency) && frequency > 0)) 
             return {success: false, message: "Mauvaise fréquence de livraison"};
 

@@ -36,7 +36,8 @@ CREATE TABLE Utilisateur(
         ID     Varchar (20) NOT NULL ,
         Nom    Varchar (30) NOT NULL ,
         Prenom Varchar (30) NOT NULL ,
-        Passwd Varchar (255) NOT NULL
+        Passwd Varchar (255) NOT NULL,
+        Equipe Int NOT NULL DEFAULT 0,
 	,CONSTRAINT Utilisateur_PK PRIMARY KEY (ID)
 )ENGINE=InnoDB;
 
@@ -62,15 +63,12 @@ CREATE TABLE Client(
 #------------------------------------------------------------
 
 CREATE TABLE Objectif(
-        ID        Varchar (20) NOT NULL ,
+        Equipe    Int NOT NULL ,
         CodeObj   Varchar (15) NOT NULL ,
         DateDebut Date NOT NULL ,
         DateFin   Date NOT NULL ,
-        QttVentes Int NOT NULL ,
-        Complete  Bool NOT NULL
-	,CONSTRAINT Objectif_PK PRIMARY KEY (ID,CodeObj,DateDebut,DateFin)
-
-	,CONSTRAINT Objectif_Utilisateur_FK FOREIGN KEY (ID) REFERENCES Utilisateur(ID)
+        QttVentes Int NOT NULL 
+	,CONSTRAINT Objectif_PK PRIMARY KEY (Equipe,CodeObj,DateDebut,DateFin)
 )ENGINE=InnoDB;
 
 

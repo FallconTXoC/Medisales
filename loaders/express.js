@@ -58,7 +58,7 @@ class ExpressLoader {
                 if (user.length < 1) return next();
                 res.render_data.user = {
                     id: cookies_data.id_user,
-                    name: user.Prenom + " " + user.Nom,
+                    name: user.firstname + " " + user.lastname,
                 };
             }
             next();

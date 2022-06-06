@@ -32,7 +32,10 @@ router.post('/contracts/save', middlewares["connections"].isConnected, cors(), c
 router.post('/contracts/update', middlewares["connections"].isConnected, cors(), contracts.updateContract);
 router.post('/contracts/delete', middlewares["connections"].isConnected, cors(), contracts.deleteContract);
 
-
-//router.get('/statistics', middlewares["connections"].isConnected, cors(), stats.display);
+router.get('/statistics', middlewares["connections"].isConnected, cors(), stats.display);
+router.get('/statistics/getWeekContracts', middlewares["connections"].isConnected, cors(), stats.getWeekContracts);
+router.get('/statistics/getMemberMonthContractsNbr', middlewares["connections"].isConnected, cors(), stats.getMemberMonthContractsNbr);
+router.get('/statistics/getTeamMembers', middlewares["connections"].isConnected, cors(), stats.getTeamMembers);
+router.get('/statistics/getWeekGoal', middlewares["connections"].isConnected, cors(), stats.getWeekGoal);
 
 module.exports = router;
