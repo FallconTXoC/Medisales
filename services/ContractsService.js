@@ -28,6 +28,10 @@ class ContractsService {
         return await ContractsInstance.getContracts();
     }
 
+    async getUserContracts(userID) {
+        return await ContractsInstance.getUserContracts(userID);
+    }
+
     async getClients() {
         return await ClientInstance.getClients();
     }
@@ -170,9 +174,11 @@ class ContractsService {
     async saveClient(clientData) {
         let clientID;
         if(clientData.exists === 'true') {
-            clientID = securityUtils.validateString(clientData.id, regex.idRegex);
+            clientID = securityUtils.validateString(clientData.idclient, regex.idRegex);
             if(clientID === false || await ClientInstance.findByID(clientID, false) !== true) 
                 return {success:false, message: "Mauvais ID client"};
+
+            return clientID;
         }
         else clientID = uid();
 
@@ -194,7 +200,7 @@ class ContractsService {
         const clientZipcode = securityUtils.validateString(clientData.zipcode, regex.zipcodeRegex);
         if(clientCity === false) return {success:false, message: "Mauvais code postal du client"};
 
-        if(clientData.exists !== true) await ClientInstance.saveClient([clientID, clientName, clientType, clientMail, clientAddress, clientCity, clientZipcode]);
+        await ClientInstance.saveClient([clientID, clientName, clientType, clientMail, clientAddress, clientCity, clientZipcode]);
 
         return clientID;
     }

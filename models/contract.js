@@ -23,8 +23,16 @@ class Contract {
 
     async getContracts() {
         return await new Promise((resolve, reject) => {
-            console.log("querying")
             db.runQuery(`SELECT * FROM Contrat`, (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result);
+            });
+        })
+    }
+
+    async getUserContracts(userID) {
+        return await new Promise((resolve, reject) => {
+            db.runPreparedQuery(`SELECT * FROM Contrat WHERE ID_Utilisateur = ?`, [userID], (err, result) => {
                 if(err) return reject(err);
                 else return resolve(result);
             });
@@ -33,7 +41,6 @@ class Contract {
 
     async getContractsByClientID(id) {
         return await new Promise((resolve, reject) => {
-            console.log("querying")
             db.runPreparedQuery(`SELECT * FROM Contrat WHERE CodeClient = ?`, [id],(err, result) => {
                 if(err) return reject(err);
                 else return resolve(result);
@@ -43,7 +50,6 @@ class Contract {
 
     async getContractsByUserID(id) {
         return await new Promise((resolve, reject) => {
-            console.log("querying")
             db.runPreparedQuery(`SELECT * FROM Contrat WHERE ID_Utilisateur = ?`, [id],(err, result) => {
                 if(err) return reject(err);
                 else return resolve(result);
@@ -80,7 +86,6 @@ class Contract {
 
     async getContractsByDate(userID, startDate, endDate) {
         return await new Promise((resolve, reject) => {
-            console.log("querying")
             db.runPreparedQuery(`SELECT * FROM Contrat WHERE Date >= ? AND Date <= ? AND ID_Utilisateur = ?`, [startDate, endDate, userID], (err, result) => {
                 if(err) return reject(err);
                 else return resolve(result);

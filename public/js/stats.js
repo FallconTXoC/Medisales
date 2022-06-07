@@ -203,10 +203,11 @@ async function getStatsData(update) {
     else document.getElementById("salesLibelle").innerHTML = "Vente";
 
     weekGoal = (await (await fetch("/statistics/getWeekGoal")).json()).goal;
+    if(!(Number.isInteger(weekGoal))) weekGoal = 0;
+    else document.getElementById("goalLibelle").innerHTML = `Signer ${weekGoal} contrats`;
+    
     let progress = weekGoal - Object.keys(contractsOfWeek).length;
     if(progress < 0) progress = 0;
-
-    document.getElementById("goalLibelle").innerHTML = `Signer ${weekGoal} contrats`;
 
     if(contractsOfMonth > 1) document.getElementById("goalSalesLibelle").innerHTML = "CONTRATS SIGNÉS";
     else document.getElementById("goalSalesLibelle").innerHTML = "CONTRAT SIGNÉ";
@@ -215,10 +216,14 @@ async function getStatsData(update) {
     goalProgress = [Object.keys(contractsOfWeek).length, progress];
 
     if(update === true) {
+        goalChart.data.datasets[0].data = goalProgress;
         salesChart.update();
         contractsChart.update();
-        goalChart.data.datasets[0].data = goalProgress;
         goalChart.update();
         goalTeamChart.update();
     }
 }
+
+setInterval(function() {
+    getStatsData(true);
+}, 300000)

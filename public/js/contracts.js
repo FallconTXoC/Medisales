@@ -94,7 +94,7 @@ setupModal();
 await getContracts();
 
 async function getContracts() {
-    contracts = (await (await fetch('/contracts/getContracts')).json()).contracts;
+    contracts = (await (await fetch('/contracts/getUserContracts')).json()).contracts;
 
     for (let contract in contracts) {
         let contract_data = contracts[contract];

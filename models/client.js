@@ -22,18 +22,18 @@ class Client {
     }
 
     async findByID(id, getData) {
+        let query = `SELECT `;
+        if(getData === true) query += `*`;
+        else query += `CodeClient`;
+
+        query += ` FROM Client WHERE CodeClient = ?`;
+
         return await new Promise((resolve, reject) => {
-            let query = `SELECT `;
-            if(getData === true) query += `*`;
-            else query += `CodeClient`;
-
-            query += ` FROM Client WHERE CodeClient = ?`;
-
             db.runPreparedQuery(query, [id], (err, result) => {
                 if(err) return reject(err);
                 else {
                     if(getData === true) return resolve(result[0]);
-                    else return result[0] ? true : false;
+                    else return resolve(result[0] ? true : false);
                 }
             });
         })
