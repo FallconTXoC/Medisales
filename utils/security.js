@@ -16,11 +16,23 @@ module.exports = {
         });
     },
 
+    /**
+     * Validates the string by escaping special chars and
+     * validating the sanitized string with the given regex.
+     * 
+     * @param {string} string 
+     * @param {regex} regex 
+     * @returns string or false
+     */
     validateString: function (string, regex) {
         let sanitized_string = this.escapeHtml(string);
         return (string && sanitized_string.match(regex)) ? sanitized_string : false;
     },
 
+    /**
+     * Returns usable regex for data validation.
+     * @returns {object} available regex strings
+     */
     regex: function() {
         let regex = {};
 

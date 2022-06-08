@@ -7,6 +7,9 @@ const securityUtils = require("../utils/security");
 class SettingsService {
     constructor() {}
 
+    /**
+     * Initialize sockets for the current instance.
+     */
     initSocket() {
         const io = socketHelper.getSockets();
         io.on('connection', (socket) => {
@@ -16,6 +19,9 @@ class SettingsService {
         });
     }
 
+    /**
+     * Under construction
+     */
     async applySettings(iduser, data) {
         // TODO : Filtrer les données
         const id_user = securityUtils.escapeHtml(iduser);
