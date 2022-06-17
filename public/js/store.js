@@ -132,7 +132,6 @@ function initModals() {
             $(".modal-overlay").remove();
             $(this).trigger('reset');
             if(contractProducts.length > 0) {
-                console.log("another product")
                 productID = contractProducts[0];
                 createContract("product-modal")
             }
@@ -261,7 +260,6 @@ function initModals() {
 }
 
 socket.on('sendProducts', (data) => {
-    console.log(data)
     const products = document.querySelectorAll('.product');
     products.forEach((product) => {
         product.remove();

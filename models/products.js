@@ -88,46 +88,62 @@ class Products {
         })
     }
 
-    async getFilters() {
+    async getAllPrincipesActifs() {
         return await new Promise((resolve, reject) => {
-            let filters = {};
-
             db.runQuery(`SELECT * FROM PrincipeActif`, (err, result) => {
                 if(err) return reject(err);
-                else {
-                    filters["principesActifs"] = (result);
+                else return resolve(result);
+            })
+        })
+    }
 
-                    db.runQuery(`SELECT * FROM Forme`, (err, result) => {
-                        if(err) return reject(err);
-                        else {
-                            filters["formes"] = (result);
+    async getAllFormes() {
+        return await new Promise((resolve, reject) => {
+            db.runQuery(`SELECT * FROM Forme`, (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result);
+            })
+        })
+    }
 
-                            db.runQuery(`SELECT * FROM VoieAdmin`, (err, result) => {
-                                if(err) return reject(err);
-                                else {
-                                    filters["voiesAdmin"] = (result);
+    async getAllVoiesAdmin() {
+        return await new Promise((resolve, reject) => {
+            db.runQuery(`SELECT * FROM VoieAdmin`, (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result);
+            })
+        })
+    }
 
-                                    db.runQuery(`SELECT * FROM Symptome`, (err, result) => {
-                                        if(err) return reject(err);
-                                        else {
-                                            filters["symptomes"] = (result);
+    async getAllSymptomes() {
+        return await new Promise((resolve, reject) => {
+            db.runQuery(`SELECT * FROM Symptome`, (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result);
+            })
+        })
+    }
 
-                                            db.runQuery(`SELECT * FROM Maladie`, (err, result) => {
-                                                if(err) return reject(err);
-                                                else {
-                                                    filters["maladies"] = (result);
+    async getAllMaladies() {
+        return await new Promise((resolve, reject) => {
+            db.runQuery(`SELECT * FROM Maladie`, (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result);
+            })
+        })
+    }
 
-                                                    return resolve(filters);
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+    async getFilters() {
+        return await new Promise(async (resolve, reject) => {
+            let filters = {};
+
+            filters["principesActifs"] = await this.getAllPrincipesActifs();
+            filters["formes"] = await this.getAllFormes();
+            filters["voiesAdmin"] = await this.getAllVoiesAdmin();
+            filters["symptomes"] = await this.getAllSymptomes();
+            filters["maladies"] = await this.getAllMaladies();
+
+            return resolve(filters);
         })
     }
 }

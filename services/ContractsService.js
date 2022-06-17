@@ -161,7 +161,6 @@ class ContractsService {
         else clientID = saveResult;
         
         const contractData = [ contractID, clientID, productID, data.userID, new Date(), qtt, contractDateFin, frequency ]
-        console.log(contractData)
         const result = await ContractsInstance.saveContract(contractData);
 
         return result ? true : {success: false, message: "Erreur interne"};
