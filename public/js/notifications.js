@@ -261,7 +261,7 @@ async function removeAllNotifications() {
             $.post(`/api/dismissNotification`, {id_notif: notification.id})
             .done(() => {
                 notification.remove();
-                if (index === array.length -1) resolve();
+                if(index === array.length -1) resolve();
             })
         })
     })

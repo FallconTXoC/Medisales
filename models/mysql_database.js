@@ -19,7 +19,7 @@ module.exports = {
             if(err) console.log(err);
             if(process.env.DEBUG === 'true') console.log(query);
             conn.query(query, function (err, results, fields) {
-                if (err) {
+                if(err) {
                     console.log(err);
                     if(callback) callback(err, null);
                     conn.release();
