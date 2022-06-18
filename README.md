@@ -23,31 +23,31 @@ L'objectif de MEDISales est de proposer une interface de gestion simplifiée pou
 
 🇬🇧 Clone the project / 🇫🇷 Cloner le projet
 
-```bash
+```
   git clone https://github.com/FallconTXoC/Medisales
 ```
 
 🇬🇧 Go to the project directory / 🇫🇷 Se rendre dans le répertoire du projet
 
-```bash
+```
   cd Medisales
 ```
 
 🇬🇧 Install dependencies / 🇫🇷 Installer les dépendances
 
-```bash
+```
   npm install
 ```
 
 🇬🇧 Start the server / 🇫🇷 Démarrer le serveur
 
-```bash
+```
   npm start
 ```
 
 🇬🇧 Mandatory .env structure / 🇫🇷 Structure du fichier .env :
 
-```bash
+```
 PORT
 JWT_SECRET
 DB_USER
