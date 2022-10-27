@@ -37,7 +37,7 @@ CREATE TABLE Utilisateur(
         Nom    Varchar (30) NOT NULL ,
         Prenom Varchar (30) NOT NULL ,
         Passwd Varchar (255) NOT NULL,
-        Equipe Int NOT NULL DEFAULT 0,
+        Equipe Int NOT NULL DEFAULT 0
 	,CONSTRAINT Utilisateur_PK PRIMARY KEY (ID)
 )ENGINE=InnoDB;
 
@@ -138,7 +138,7 @@ CREATE TABLE Contrat(
         Date              Date NOT NULL ,
         QTT               Int NOT NULL ,
         DateFin           Date NOT NULL ,
-        Frequence         Int NOT NULL ,
+        Frequence         Int NOT NULL
 	,CONSTRAINT Contrat_PK PRIMARY KEY (ID)
 
 	,CONSTRAINT Contrat_Utilisateur_FK FOREIGN KEY (ID_Utilisateur) REFERENCES Utilisateur(ID)
