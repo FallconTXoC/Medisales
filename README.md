@@ -18,8 +18,8 @@ L'objectif de MEDISales est de proposer une interface de gestion simplifiée pou
 
 ## Run Locally
 
-🇬🇧 Build the database using the provided sql script in `database_utils` folder  
-🇫🇷 Créer la base de données en utilisant le script sql fourni dans le dossier `database_utils`
+🇬🇧 Build the database using the provided sql script in `database_utils` folder. The database name should be `Medisales`.
+🇫🇷 Créer la base de données en utilisant le script sql fourni dans le dossier `database_utils`. Le nom de la base de données doit être `Medisales`.
 
 🇬🇧 Clone the project / 🇫🇷 Cloner le projet
 
@@ -59,9 +59,9 @@ DEBUG        // boolean, if true database queries will be logged
 
 ## Connect to the app
 
-🇬🇧 Either use `insert_users.sql` script in `database_utils` to quickly use accounts or make ones by yourself, beware that the password must be encrypted using BCrypt. The database name should be `Medisales`.
+🇬🇧 Either use `insert_users.sql` script in `database_utils` to quickly use accounts or make ones by yourself, beware that the password must be encrypted using BCrypt.
 
-🇫🇷 Il est possible d'utiliser `insert_users.sql` dans `database_utils`, pour utiliser des comptes précréés, ou d'insérer manuellement des comptes. Notez que les mots de passe doivent être chiffrés en utilisant BCrypt. Le nom de la base de données doit être `Medisales`.
+🇫🇷 Il est possible d'utiliser `insert_users.sql` dans `database_utils`, pour utiliser des comptes précréés, ou d'insérer manuellement des comptes. Notez que les mots de passe doivent être chiffrés en utilisant BCrypt.
 
 ### Accounts
 
