@@ -71,7 +71,7 @@ function productTemplate(product) {
                                 <div class="checkbox-container">
                                     <input type="checkbox" id="prodBtn_${product.CodeProd}" name="Products" value=${product.CodeProd}>
                                 </div>
-                                <img class="prod-image" src="" alt="Image d'illustration pour ${product.Libelle}">
+                                <img class="prod-image" src="/assets/pills.png" alt="Image d'illustration pour ${product.Libelle}">
                                 <p class="prod-name" prod-code>${product.Libelle}</p>
                                 <p class="prod-price">${(product.Prix).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}€/boîte</p>
                             </div>

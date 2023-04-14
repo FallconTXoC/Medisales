@@ -124,7 +124,7 @@ class ContractsService {
             return {success: false, message: "Mauvaise quantité"};
 
         let contractDateFin = new Date(data.dateFin);
-        if(contractDateFin === '') contractDateFin = contract.DateFin;
+        if(data.dateFin === '') contractDateFin = contract.DateFin;
         else if(Object.prototype.toString.call(contractDateFin) !== '[object Date]')
             return {success: false, message: "Mauvaise date de fin de contrat"};
 
