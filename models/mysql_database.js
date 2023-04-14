@@ -12,7 +12,8 @@ module.exports = {
     runPreparedQuery: function (query, params, callback) {
         connection.getConnection(function(err, conn) {
             if (err) console.log(err);
-            conn.execute(query, params, function (err, results, fields) {
+            let finalQuery = mysql.format(query, params)
+            conn.query(finalQuery, function (err, results, fields) {
                 if (err) {
                     console.log(err);
                     if (callback) callback(err, null);
