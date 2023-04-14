@@ -48,22 +48,30 @@ L'objectif de MEDISales est de proposer une interface de gestion simplifiée pou
 🇬🇧 Mandatory .env structure / 🇫🇷 Structure du fichier .env :
 
 ```
-PORT
-JWT_SECRET
+PORT         // make sure it is available
+JWT_SECRET   // you need to generate it
 DB_USER
 DB_PASSWORD
-HOST
-ORIGIN
-DEBUG    // boolean, if true database queries will be logged
+HOST         // database host ip
+ORIGIN       // website url
+DEBUG        // boolean, if true database queries will be logged
 ```
 
 ## Connect to the app
 
-🇬🇧 Either use `insert_users.sql` script in `database_utils` to quickly use accounts or make ones by yourself, beware that the password must be encrypted using BCrypt.  
-Accounts in `insert_users.sql` have the same password : `pass123`.
+🇬🇧 Either use `insert_users.sql` script in `database_utils` to quickly use accounts or make ones by yourself, beware that the password must be encrypted using BCrypt. The database name should be `Medisales`.
 
-🇫🇷 Il est possible d'utiliser `insert_users.sql` dans `database_utils`, pour utiliser des comptes précréés, ou d'insérer manuellement des comptes. Notez que les mots de passe doivent être chiffrés en utilisant BCrypt.  
-Les comptes présents dans le script partagent le même mot de passe : `pass123`.
+🇫🇷 Il est possible d'utiliser `insert_users.sql` dans `database_utils`, pour utiliser des comptes précréés, ou d'insérer manuellement des comptes. Notez que les mots de passe doivent être chiffrés en utilisant BCrypt. Le nom de la base de données doit être `Medisales`.
+
+### Accounts
+
+🇬🇧 Usernames / 🇫🇷 Nom d'utilisateurs :
+- a.swordsmith
+- j.smith
+
+🇬🇧 Accounts in `insert_users.sql` have the same password : `pass123`.
+
+🇫🇷 Les comptes présents dans le script partagent le même mot de passe : `pass123`.
 
 ## Documentation
 
