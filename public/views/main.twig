@@ -11,6 +11,11 @@
     {% endif %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {% if enable.selector %}
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
+    {% endif %}
     <script src="/libs/socketio/socket.io.js"></script>
     <script src="/libs/jquery/jquery.js"></script>
     <script src="/libs/jquery/jqueryui.js"></script>
@@ -31,7 +36,7 @@
                     <a class="med-settings" href="#"></a>
                     <a class="med-bell" href="#"></a>
                     <p class="username">{{ user.name }}</p>
-                    <a class="med-disconnect" href="#"></a>
+                    <a class="med-disconnect" href="/logout"></a>
                 </div>
             </div>
 

@@ -1,0 +1,116 @@
+.store-content {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - 1.6vw);
+    height: calc(100% - 1.6vw);
+
+    .left-panel {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        border-radius: 40px;
+        width: 20%;
+        height: 100%;
+
+        .panel-content {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: space-around;
+            align-items: flex-start;
+            width: calc(100% - 2.8vw);
+            height: calc(100% - 2vw);
+
+            font-family: Roboto;
+
+            h1, h2, p {
+                margin: 0;
+            }
+
+            .panel-header {
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+
+                .filters-title {
+                    font-family: Montserrat;
+                    font-weight: 500;
+                    font-size: 26px;
+                }
+
+                .reset-button {
+                    font-weight: 300;
+                    font-size: 14px;
+                    text-decoration: none;
+                    padding-top: 8px;
+                    color: #0179BA;
+                    cursor: pointer;
+                    transition: 0.2s;
+
+                    &:hover {
+                        color: lighten(#0179BA, 20%);
+                    }
+                }
+            }
+
+            .separator {
+                width: 100%;
+                border-top: 1px solid #e6e6e6;
+                border-radius: 60px;
+            }
+
+            .searchbar {
+                background-color: white;
+                border: 1px solid #BBCEE1;
+                border-radius: 10px;
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: flex-start;
+                overflow: hidden;
+                height: 40px;
+                width: 100%;
+
+                input {
+                    border: none;
+                    font-family: Lato, sans-serif;
+                    color: black;
+                    font-weight: 400;
+                    font-size: 17px;
+                    padding: 3px 10px;
+
+                    &:focus {
+                        outline: none;
+                    }
+                    &::placeholder {
+                        color: #939393;
+                    }
+                    &:-webkit-autofill:hover, 
+                    &:-webkit-autofill,
+                    &:-webkit-autofill:focus, 
+                    &:-webkit-autofill:active{
+                        -webkit-box-shadow: 0 0 0 30px white inset;
+                    }
+                }
+                
+                a {
+                    text-align: center;
+                    text-decoration: none;
+                    color: black;
+                }
+            }
+        }
+    }
+
+    .right-panel {
+        background: white;
+        border-radius: 40px;
+        width: 77%;
+        height: 100%;
+        overflow: hidden;
+    }
+}
