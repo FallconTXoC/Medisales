@@ -7,14 +7,15 @@ const helmet = require(`helmet`);
 const cookieParser = require(`cookie-parser`);
 const noCache = require(`nocache`);
 const cors = require(`cors`);
-const server = require('http').createServer(app);
-const io = helper.socket(server);
-const routes = require("../routes");
+const routes = require(`../routes`);
 require(`dotenv`).config();
 
 class ExpressLoader {
     constructor() {
         const app = express();
+        const server = require('http').createServer(app);
+        //const io = helper.socket(server);
+
         app.set("twig options", {
             "allow_async": true,
             "autoescape": false,
@@ -36,9 +37,6 @@ class ExpressLoader {
         app.use(cookieParser())
         app.use(bodyparser.json());
         app.use(noCache());
-        app.use(fileUpload({
-            createParentPath: true
-        }));
         app.use(express.static(path.join(__dirname, "static")));
         app.use(express.static(path.join(__dirname, "data")));
 
@@ -73,7 +71,7 @@ class ExpressLoader {
             const secondString = second < 10 ? `0${second}` : second;
             const dateString = `${hoursString}:${minutesString}:${secondString}`;
 
-            console.log(`[ROUTER][${dateString}] {${req.headers['x-forwarded-for']}} ${req.method} ${req.url}`);
+            console.log(`[ROUTER][${dateString}] ${req.method} ${req.url}`);
             next();
         });
 

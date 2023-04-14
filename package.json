@@ -4,7 +4,7 @@
   "description": "Application de gestion pour des visiteurs médicaux",
   "main": "app.js",
   "scripts": {
-    "test": "nodemon --ignore data/"
+    "start": "nodemon --ignore data/"
   },
   "author": "Murolo Mathis",
   "license": "ISC",
@@ -32,6 +32,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "nocache": "^3.0.2",
+    "nodemon": "^2.0.15",
     "nyc": "^15.1.0",
     "path": "^0.12.7",
     "pdf-lib": "^1.17.1",
