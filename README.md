@@ -47,7 +47,7 @@ L'objectif de MEDISales est de proposer une interface de gestion simplifiée pou
 
 🇬🇧 Mandatory .env structure / 🇫🇷 Structure du fichier .env :
 
-```bash
+```
 PORT
 JWT_SECRET
 DB_USER
