@@ -25,6 +25,7 @@ router.get('/store/getProduct/:id', middlewares["connections"].isConnected, cors
 
 router.get('/contracts', middlewares["connections"].isConnected, cors(), contracts.display);
 router.get('/contracts/getContracts', middlewares["connections"].isConnected, cors(), contracts.getContracts);
+router.get('/contracts/getUserContracts', middlewares["connections"].isConnected, cors(), contracts.getUserContracts);
 router.get('/contracts/contract/:id', middlewares["connections"].isConnected, cors(), contracts.showContract);
 router.get('/contracts/getClients', middlewares["connections"].isConnected, cors(), contracts.getClients);
 router.get('/contracts/getClient/:id', middlewares["connections"].isConnected, cors(), contracts.getClient);

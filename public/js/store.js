@@ -205,8 +205,6 @@ function initModals() {
                     mail: $(`#mail`).val(),
                 }
 
-                console.log(clientData);
-
                 for(let [key, value] of Object.entries(productsInfo)) {
                     const contractData = {
                         product: value,

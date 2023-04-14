@@ -67,7 +67,10 @@ class User {
         return await new Promise((resolve, reject) => {
             db.runPreparedQuery(`SELECT OBJ.QttVentes FROM Utilisateur, Objectif OBJ WHERE Utilisateur.ID = ? AND Utilisateur.Equipe = OBJ.Equipe AND OBJ.DateDebut >= ? AND OBJ.DateFin <= ?`, [this.username, dateDebut, dateFin], (err, result) => {
                 if(err) return reject(err);
-                else return resolve(result[0].QttVentes);
+                else {
+                    if(result[0]) return resolve(result[0].QttVentes);
+                    else return resolve("Aucun objectif");
+                }
             })
         })
     }
