@@ -12,7 +12,8 @@ async function display(req, res) {
 
     res.render_data.js_files.push({
         src: "/js/login.js",
-        defer: true
+        defer: true,
+        type: "module"
     })
     res.render_data.content = "login.twig";
     res.render_data.disable = {

@@ -18,3 +18,109 @@
         height: 100%;
     }
 }
+
+.tabulator-row {
+    &.tabulator-selected {
+        background-color: transparent !important;
+
+        &:hover {
+            background-color: transparent !important;
+        }
+    }
+}
+
+.tabulator-col-title {
+    input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+        background-color: white;
+        border-radius: 15%;
+        vertical-align: middle;
+        border: 1px solid #E1E1E1;
+        appearance: none;
+        -webkit-appearance: none;
+        outline: none;
+        cursor: pointer;
+
+        &:after {
+            content: '';
+            display: block;
+            width: 70%;
+            height: 70%;
+            text-align: center;
+            border-radius: 15%;
+            border: 2px solid white;
+            background-color: white;
+            opacity: 0;
+        }
+
+        &:checked {
+            &:after {
+                opacity: 1;
+                background-color: #6CD9B1;
+            }
+        }
+    }
+}
+
+.tabulator-cell {
+    input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+        background-color: white;
+        border-radius: 15%;
+        vertical-align: middle;
+        border: 1px solid #E1E1E1;
+        appearance: none;
+        -webkit-appearance: none;
+        outline: none;
+        cursor: pointer;
+
+        &:after {
+            content: '';
+            display: block;
+            width: 70%;
+            height: 70%;
+            text-align: center;
+            border-radius: 15%;
+            border: 2px solid white;
+            background-color: white;
+            opacity: 0;
+        }
+
+        &:checked {
+            &:after {
+                opacity: 1;
+                background-color: #6CD9B1;
+            }
+        }
+    }
+
+    .buttons-container {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        width: 100%;
+
+        a {
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .edit-contract {
+            color: #8E8E8E;
+
+            &:hover {
+                color: #53ADFF;
+            }
+        }
+
+        .delete-contract {
+            color: #d94444;
+
+            &:hover {
+                color: #F64C4C;
+            }
+        }
+    }
+}

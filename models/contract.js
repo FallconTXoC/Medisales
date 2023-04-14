@@ -62,7 +62,7 @@ class Contract {
 
     async updateContract(data) {
         return await new Promise((resolve, reject) => {
-            db.runPreparedQuery(`UPDATE Contrat SET CodeProd = ?, QTT = ?, DateFin = ?, Frequence = ? WHERE ID = ?)`, [data.codeProd, data.qtt, data.endDate, data.frequency, data.id], (err, result) => {
+            db.runPreparedQuery(`UPDATE Contrat SET QTT = ?, DateFin = ?, Frequence = ? WHERE ID = ?`, [data.qtt, data.dateFin, data.frequency, data.id], (err, result) => {
                 if(err) return reject(err);
                 else return resolve(true);
             })

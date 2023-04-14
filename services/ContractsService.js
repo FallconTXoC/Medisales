@@ -32,6 +32,10 @@ class ContractsService {
         return await ClientInstance.getClients();
     }
 
+    async getClientByID(id, getData) {
+        return await ClientInstance.findByID(id, getData);
+    }
+
     async getUserContracts(userID) {
         return await ContractsInstance.getContractsByUserID(userID);
     }
@@ -110,22 +114,27 @@ class ContractsService {
         const contractID = securityUtils.validateString(data.id, regex.idRegex);
         if(contractID === false || await ContractsInstance.contractExists(contractID) === false) return {success: false, message: "Mauvais ID de contrat"};
 
-        const productID = securityUtils.validateString(data.productID, regex.idRegex);
-        if(productID === false) return {success: false, message: "Mauvais ID de produit"};
+        const contract = await ContractsInstance.findByID(contractID);
 
-        const qtt = data.qtt;
-        if(!(Number.isInteger(qtt) && qtt > 0)) return {success: false, message: "Mauvaise quantité"};
+        console.log(contract)
 
-        const contractDateFin = data.dateFin;
-        if(Object.prototype.toString.call(contractDateFin) !== '[object Date]')
+        let qtt = data.qtt;
+        if(qtt === '') qtt = contract.QTT;
+        else if(!(Number.isInteger(qtt) && qtt > 0)) 
+            return {success: false, message: "Mauvaise quantité"};
+
+        let contractDateFin = data.dateFin;
+        if(contractDateFin === '') contractDateFin = contract.DateFin;
+        else if(Object.prototype.toString.call(contractDateFin) !== '[object Date]')
             return {success: false, message: "Mauvaise date de fin de contrat"};
 
-        const frequency = data.frequency;
-        if(!(Number.isInteger(frequency) && frequency > 0)) return {success: false, message: "Mauvaise fréquence de livraison"};
+        let frequency = data.frequency;
+        if(frequency === '') frequency = contract.Frequence;
+        else if(!(Number.isInteger(frequency) && frequency > 0)) 
+            return {success: false, message: "Mauvaise fréquence de livraison"};
 
         const contractData = {
             id: contractID,
-            productID: productID,
             qtt: qtt,
             dateFin: contractDateFin,
             frequency: frequency

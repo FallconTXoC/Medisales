@@ -45,7 +45,9 @@ async function showProduct(req, res) {
 }
 
 async function getProduct(req, res) {
-    const result = await StoreServiceInstance.getProduct(req.body.id);
+    const result = await StoreServiceInstance.getProduct(req.params.id);
 
-    return (result !== null && result !== undefined) ? res.status(200).json({success: true, product: result}) : res.status(400).json({success: false, message: "Produit introuvable"});
+    return (result !== null && result !== undefined)
+        ? res.status(200).json({success: true, product: result})
+        : res.status(400).json({success: false, message: "Produit introuvable"});
 }
