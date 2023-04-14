@@ -17,7 +17,7 @@ module.exports = {
     runQuery: function (query, callback) {
         pool.getConnection(function(err, conn) {
             if (err) console.log(err);
-            console.log(query)
+            if(process.env.DEBUG === 'true') console.log(query);
             conn.query(query, function (err, results, fields) {
                 if (err) {
                     console.log(err);

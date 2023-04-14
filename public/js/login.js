@@ -9,12 +9,10 @@ socket.on("signin", (data) => {
 });
 
 $(`#signin`).click((event) => {
-    console.log("click")
     event.preventDefault();
     const username = $(`#username`).val();
     const password = $(`#password`).val();
     if (!username || !username.match(/^[a-zA-Z.]+$/i)) {
-        console.log("notif")
         return notifier.alert("Merci d'entrer un nom d'utilisateur valide.");
     }
     if (!password) notifier.alert("Merci d'entrer un mot de passe.");

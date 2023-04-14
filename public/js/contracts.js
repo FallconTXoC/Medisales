@@ -38,7 +38,6 @@ let table = new Tabulator("#contracts-table", {
 });
 
 table.on('rowSelected', (e, row) => {
-    console.log(table.getSelectedData())
     $('.contract-button').removeClass('hidden');
 })
 table.on('rowDeselected', (e, row) => {
@@ -187,7 +186,6 @@ function editContract() {
 
 function setupModal() {
     $(`#modify_contract`).on("click", (e) => {
-        console.log("click")
         const contractData = {
             id: contractID,
             qtt: $(`#qtt`).val(),
