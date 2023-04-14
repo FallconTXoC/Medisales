@@ -1,5 +1,6 @@
 const ContractsService = require('../services/ContractsService');
 const ContractsServiceInstance = new ContractsService();
+const tokenHelper = require(`../utils/token`);
 let isSocketInitialized = false;
 
 module.exports = { display, showContract, saveContract, updateContract, deleteContract, getClients };
@@ -33,18 +34,26 @@ async function showContract(req, res) {
 
 async function getClients(req, res) {
     const result = await ContractsServiceInstance.getClients();
+    console.log(result);
 
     return (result !== null && result !== undefined)
         ? res.status(200).json({success: true, clients: result})
-        : res.status(400).json({success: false, message: result.message});
+        : res.status(400).json({success: false, error: result.message});
 }
 
 async function saveContract(req, res) {
-    const result = await ContractsServiceInstance.saveContract(req.body);
+    const cookies_data = await tokenHelper.decryptToken(req.cookies.token);
+
+    const data = {
+        ...req.body,
+        userID: cookies_data.id_user
+    }
+    const result = await ContractsServiceInstance.saveContract(data);
+    console.log(result)
 
     return (result === true)
         ? res.status(200).json({success: true})
-        : res.status(400).json({success: false, message: result.message});
+        : res.status(400).json({success: false, error: result.message});
 }
 
 async function updateContract(req, res) {
@@ -52,7 +61,7 @@ async function updateContract(req, res) {
 
     return (result === true)
         ? res.status(200).json({success: true})
-        : res.status(400).json({success: false, message: result.message});
+        : res.status(400).json({success: false, error: result.message});
 }
 
 async function deleteContract(req, res) {
@@ -60,5 +69,5 @@ async function deleteContract(req, res) {
 
     return (result === true)
         ? res.status(200).json({success: true})
-        : res.status(400).json({success: false, message: result.message});
+        : res.status(400).json({success: false, error: result.message});
 }

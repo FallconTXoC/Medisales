@@ -1,5 +1,6 @@
 const socketHelper = require("../utils/socket");
 const securityUtils = require("../utils/security");
+const fns = require('date-fns');
 const uid = require('uniqid');
 
 const Contracts = require("../models/contract");
@@ -28,7 +29,7 @@ class ContractsService {
     }
 
     async getClients() {
-        return await ContractsInstance.getClients();
+        return await ClientInstance.getClients();
     }
 
     async getUserContracts(userID) {
@@ -80,35 +81,26 @@ class ContractsService {
     async saveContract(data) {
         const contractID = uid();
 
-        let clientID;
-        const saveResult = await saveClient(data.client);
-        if(typeof saveResult === 'object') return saveResult;
-        else clientID = saveResult;
-
-        const productID = securityUtils.validateString(data.productID, regex.idRegex);
+        const productID = securityUtils.validateString(data.product.prodID, regex.idRegex);
         if(productID === false) return {success: false, message: "Mauvais ID de produit"};
         
-        const qtt = data.qtt;
+        const qtt = parseInt(data.product.qtt);
         if(!(Number.isInteger(qtt) && qtt > 0)) return {success: false, message: "Mauvaise quantité"};
 
-        const contractDateFin = data.dateFin;
-        if(Object.prototype.toString.call(contractDateFin) !== '[object Date]')
-            return {success: false, message: "Mauvaise date de fin de contrat"};
+        const duree = parseInt(data.product.duree);
+        if(!(Number.isInteger(qtt) && qtt > 0)) return {success: false, message: "Mauvaise durée"};
+        const contractDateFin = fns.add(new Date(), {months: duree});
 
-        const frequency = data.frequency;
+        const frequency = parseInt(data.product.frequency);
         if(!(Number.isInteger(frequency) && frequency > 0)) return {success: false, message: "Mauvaise fréquence de livraison"};
-        
-        const contractData = {
-            id: contractID,
-            clientID: clientID,
-            userID: data.userID,
-            productID: productID,
-            date: new Date(),
-            qtt: qtt,
-            dateFin: contractDateFin,
-            frequency: frequency
-        }
 
+        let clientID;
+        const saveResult = await this.saveClient(data.client);
+        if(typeof saveResult === 'object') return saveResult;
+        else clientID = saveResult;
+        
+        const contractData = [ contractID, clientID, productID, data.userID, new Date(), qtt, contractDateFin, frequency ]
+        console.log(contractData)
         const result = await ContractsInstance.saveContract(contractData);
 
         return result ? true : {success: false, message: "Erreur interne"};
@@ -179,7 +171,7 @@ class ContractsService {
         const clientZipcode = securityUtils.validateString(clientData.zipcode, regex.zipcodeRegex);
         if(clientCity === false) return {success:false, message: "Mauvais code postal du client"};
 
-        if(clientData.exists !== true) await ClientInstance.saveClient({clientID: clientID, clientName: clientName, clientType: clientType, clientMail: clientMail, clientAddress: clientAddress, clientCity: clientCity, clientZipcode: clientZipcode});
+        if(clientData.exists !== true) await ClientInstance.saveClient([clientID, clientName, clientType, clientMail, clientAddress, clientCity, clientZipcode]);
 
         return clientID;
     }

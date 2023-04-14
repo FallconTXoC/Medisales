@@ -1,10 +1,11 @@
 import NotificationPopup from './notification-popup.js';
 const socket = io();
 
-let selected_products = [];
-let contractProducts = [];
-let productsInfo = {};
-let contractInfo = {};
+var selected_products = [];
+var contractProducts = [];
+var productsInfo = {};
+var contractInfo = {};
+var submitDone = false;
 
 $('.multi-select').select2({
     theme: 'bootstrap-5',
@@ -49,6 +50,17 @@ $('.contract-button').click(() => {
     contractProducts = [...selected_products];
     createContract("product-modal", contractProducts[0]);
 });
+$('.product-modal-input').on('input', () => {
+    let disabled = false;
+    $('.product-modal-input').each((i, obj) => { if(obj.value === "") disabled = true; })
+    $('#add_product').prop("disabled", disabled);
+})
+$('.client-modal-input').on('input', () => {
+    let disabled = false;
+    $('.client-modal-input').each((i, obj) => { if(obj.value === "") disabled = true; })
+    $('#add_client').prop("disabled", disabled);
+})
+
 
 function productTemplate(product) {
     const productHTML = `<div class="product" id="prod_${product.CodeProd}" prod-code=${product.CodeProd}>
@@ -72,7 +84,6 @@ function createContract(modalBox, productID = "") {
     $("#" + modalBox).fadeIn();
     switch(modalBox) {
         case "product-modal":
-            console.log(productsInfo);
             let product_name = $(`.prod-name[prod-code=${productID}]`).html();
             $('#product-modal-title').html(`Modalités de contrat - ${product_name}`)
             $(`#add_product`).on("click", (e) => {
@@ -80,14 +91,17 @@ function createContract(modalBox, productID = "") {
                     prodID: productID,
                     qtt: $(`#qtt`).val(),
                     frequency: $(`#freq`).val(),
-                    endDate: $(`#endDate`).val(),
+                    duree: $(`#duration`).val(),
                 }
                 productsInfo[`${productID}`] = productData;
-                contractProducts.shift();
+                contractProducts = contractProducts.filter(prod_id => prod_id !== productID);
                 $(".modal-box, .modal-overlay").fadeOut(100, function() {
                     $(".modal-overlay").remove();
                     $(this).trigger('reset');
-                    if(contractProducts[0] !== undefined) createContract("product-modal", contractProducts[0])
+                    if(contractProducts.length > 0) {
+                        console.log("another product")
+                        createContract("product-modal", contractProducts[0])
+                    }
                     else createContract("client-modal")
                 });
             })
@@ -95,11 +109,15 @@ function createContract(modalBox, productID = "") {
                 $(".modal-box, .modal-overlay").fadeOut(100, function() {
                     $(".modal-overlay").remove();
                 });
-                productsInfo = {};
+                let props = Object.getOwnPropertyNames(productsInfo);
+                for (let i = 0; i < props.length; i++) delete productsInfo[props[i]];
             })
             break;
+
         case "client-modal":
-            console.log(productsInfo);
+            let asArray = Object.entries(productsInfo);
+            productsInfo = Object.fromEntries(asArray.filter(([key, value]) => (selected_products.includes(key))));
+
             $.get(`/contracts/getClients`)
             .done(function(data) { 
                 const clients = data.clients;
@@ -112,11 +130,12 @@ function createContract(modalBox, productID = "") {
                             id: client.CodeClient,
                             type: client.Type,
                             mail: client.Mail,
-                            street: address.Adresse,
-                            city: address.Ville,
-                            postcode: address.CP,
+                            street: client.Adresse,
+                            city: client.Ville,
+                            postcode: client.CP,
                         });
                 }
+
                 $("#libelle").autocomplete({
                     minLength:2,
                     delay: 300,
@@ -138,67 +157,63 @@ function createContract(modalBox, productID = "") {
                 });
                 $(`#addClient_form`).on("submit", (e) => {
                     e.preventDefault();
-                    const clientData = {
-                        idclient: $(`#idclient`).val(),
-                        nomClient: $(`#libelle`).val(),
-                        street: $(`#street`).val(),
-                        type: $(`#type`).val(),
-                        postalcode: $(`#zipcode`).val(),
-                        city: $(`#city`).val(),
-                        mail: $(`#mail`).val(),
-                    }
-
-                    $.post(`/contracts/saveclient`, clientData)
-                    .done(function(data) {
-                        $(".modal-box, .modal-overlay").fadeOut(100, function() {
-                            $(".modal-overlay").remove();
-                        });
-                        contractInfo["clientID"] = data.clientID;
-                        contractInfo["productsData"] = productsInfo;
-
-                        $.post(`/contracts/save`, {data: contractInfo})
-                        .done(function(data) {
-                            new NotificationPopup(`Succès`,`Succès de l'enregistrement`, "Le contrat a été enregistré avec succès", `success`).show();
-                        })
-                        .fail(function(xhr, status, err) {
-                            let errorMessage;
-                            try {
-                                if(xhr.responseJSON.error.message) {
-                                    errorMessage = xhr.responseJSON.error.message
-                                } else {
-                                    errorMessage = xhr.responseJSON.error;
+                    if(submitDone === false) {
+                        submitDone = true;
+                        let exists = false;
+                        if($(`#idclient`).val() !== "") exists = true;
+    
+                        const clientData = {
+                            exists: exists,
+                            idclient: $(`#idclient`).val(),
+                            clientName: $(`#libelle`).val(),
+                            address: $(`#street`).val(),
+                            type: $(`#type`).val(),
+                            zipcode: $(`#zipcode`).val(),
+                            city: $(`#city`).val(),
+                            mail: $(`#mail`).val(),
+                        }
+    
+                        for(let [key, value] of Object.entries(productsInfo)) {
+                            const contractData = {
+                                product: value,
+                                client: clientData
+                            }
+    
+                            console.log(contractData)
+    
+                            $.post(`/contracts/save`, contractData)
+                            .done(function(data) {
+                                new NotificationPopup(`Succès`,`Succès de l'enregistrement`, "Le contrat a été enregistré avec succès", `success`).show();
+                            })
+                            .fail(function(xhr, status, err) {
+                                let errorMessage;
+                                try {
+                                    if(xhr.responseJSON.error.message) {
+                                        errorMessage = xhr.responseJSON.error.message
+                                    } else {
+                                        errorMessage = xhr.responseJSON.error;
+                                    }
+                                } catch (e) {
+                                    errorMessage = "undefined error"
                                 }
-                            } catch (e) {
-                                errorMessage = "undefined error"
-                            }
-                            if(errorMessage) {
-                                new NotificationPopup(`Erreur`,`Echec de l'enregistrement`, errorMessage, `error`).show();
-                            }
-                        })
-                    })
-                    .fail(function(xhr, status, err) {
-                        let errorMessage;
-                        try {
-                            if(xhr.responseJSON.error.message) {
-                                errorMessage = xhr.responseJSON.error.message
-                            } else {
-                                errorMessage = xhr.responseJSON.error;
-                            }
-                        } catch (e) {
-                            errorMessage = "undefined error"
+                                if(errorMessage) {
+                                    new NotificationPopup(`Erreur`,`Echec de l'enregistrement`, errorMessage, `error`).show();
+                                    submitDone = false;
+                                }
+                            })
                         }
-                        if(errorMessage) {
-                            new NotificationPopup(`Erreur`,`Echec de l'enregistrement`, errorMessage, `error`).show();
-                        }
-                    })
+                    }
                 })
             })
             $(".js-modal-no").click(function() {
                 $(".modal-box, .modal-overlay").fadeOut(100, function() {
                     $(".modal-overlay").remove();
                 });
-                productsInfo = {};
-                contractInfo = {};
+                let props = Object.getOwnPropertyNames(productsInfo);
+                for (let i = 0; i < props.length; i++) delete productsInfo[props[i]];
+
+                props = Object.getOwnPropertyNames(contractInfo);
+                for (let i = 0; i < props.length; i++) delete contractInfo[props[i]];
             })
             break;
     }

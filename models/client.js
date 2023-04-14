@@ -23,6 +23,15 @@ class Client {
         })
     }
 
+    async getClients() {
+        return await new Promise((resolve, reject) => {
+            db.runQuery(`SELECT * FROM Client`, (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result);
+            });
+        })
+    }
+
     async saveClient(client) {
         return await new Promise((resolve, reject) => {
             db.runPreparedQuery(`INSERT INTO Client VALUES(?,?,?,?,?,?,?)`, client, (err, result) => {
