@@ -87,6 +87,51 @@ class Products {
             })
         })
     }
+
+    async getAllPrincipesActifs() {
+        return await new Promise((resolve, reject) => {
+            db.runQuery(`SELECT * FROM PrincipeActif`, (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result);
+            })
+        })
+    }
+
+    async getAllFormes() {
+        return await new Promise((resolve, reject) => {
+            db.runQuery(`SELECT * FROM Forme`, (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result);
+            })
+        })
+    }
+
+    async getAllVoiesAdmin() {
+        return await new Promise((resolve, reject) => {
+            db.runQuery(`SELECT * FROM VoieAdmin`, (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result);
+            })
+        })
+    }
+
+    async getAllSymptomes() {
+        return await new Promise((resolve, reject) => {
+            db.runQuery(`SELECT * FROM Symptome`, (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result);
+            })
+        })
+    }
+
+    async getAllMaladies() {
+        return await new Promise((resolve, reject) => {
+            db.runQuery(`SELECT * FROM Maladie`, (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result);
+            });
+        })
+    }
 }
 
 module.exports = Products;

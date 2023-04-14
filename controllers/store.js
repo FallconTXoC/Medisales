@@ -15,7 +15,13 @@ async function display(req, res) {
         defer: true
     })
     res.render_data.content = "store.twig";
+    
     res.render_data.products = await StoreServiceInstance.getProducts();
+    res.render_data.principesActifs = await StoreServiceInstance.getPrincipesActifs();
+    res.render_data.formes = await StoreServiceInstance.getFormes();
+    res.render_data.voiesAdmin = await StoreServiceInstance.getVoiesAdmin();
+    res.render_data.symptomes = await StoreServiceInstance.getSymptomes();
+    res.render_data.maladies = await StoreServiceInstance.getMaladies();
     res.render_data.enable = { selector: true };
 
     res.render("main.twig", res.render_data);

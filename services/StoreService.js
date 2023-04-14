@@ -21,6 +21,27 @@ class StoreService {
         return await ProductsInstance.getProducts();
     }
 
+    async getPrincipesActifs() {
+        return await ProductsInstance.getAllPrincipesActifs();
+    }
+
+    async getFormes() {
+        return await ProductsInstance.getAllFormes();
+
+    }
+
+    async getVoiesAdmin() {
+        return await ProductsInstance.getAllVoiesAdmin();
+    }
+
+    async getSymptomes() {
+        return await ProductsInstance.getAllSymptomes();
+    }
+
+    async getMaladies() {
+        return await ProductsInstance.getAllMaladies();
+    }
+
     async getSortedProducts(data) {
         const symptomes = data.symptomes ?? [];
         const principesActifs = data.principesActifs ?? [];

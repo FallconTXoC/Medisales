@@ -5,82 +5,84 @@
                 <h1 class="filters-title">Filtres</h1>
                 <a class="reset-button" href="#">Réinitialiser</a>
             </div>
-            <div class="searchbar">
-                <input type="text" class="search-input" placeholder="Rechercher par nom"/>
-                <a class="search-icon" href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
-            </div>
-            <hr class="separator">
-            <div class="filter-category">
-                <h2 class="category-title">Principes actifs</h2>
-                <div class="selectbox-container">
-                    {% for pa in principesActifs %}
-                        <input type="radio" id="pa_{{pa.CodeMol}}" name="PA" value={{pa.CodeMol}}>
-                        <label for="pa_{{pa.CodeMol}}">{{pa.Libelle}}</label>
-                    {% endfor %}
+
+            <div class="filters-container">
+                <div class="filter-category">
+                    <h2 class="category-title">Principes actifs</h2>
+                    <select class="multi-select" name="principesActifs" id="principesActifs" placeholder="Rechercher des principes actifs" multiple>
+                        {% for pa in principesActifs %}
+                            <option value={{pa.CodeMol}}>{{pa.Libelle}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <hr class="separator">
+                <div class="filter-category">
+                    <h2 class="category-title">Formes</h2>
+                    <div class="selectbox-container">
+                        {% for forme in formes %}
+                        <div class="filter-option">
+                            <input type="checkbox" class="filter-checkbox" id="fo_{{forme.CodeForme}}" name="Formes" value={{forme.CodeForme}}>
+                            <label for="fo_{{forme.CodeForme}}">{{forme.Libelle}}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <hr class="separator">
+                <div class="filter-category">
+                    <h2 class="category-title">Voies d'administration</h2>
+                    <div class="selectbox-container">
+                        {% for va in voiesAdmin %}
+                        <div class="filter-option">
+                            <input type="checkbox" class="filter-checkbox" id="va_{{va.CodeVoieAdmin}}" name="VA" value={{va.CodeVoieAdmin}}>
+                            <label for="va_{{va.CodeVoieAdmin}}">{{va.Libelle}}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <hr class="separator">
+                <div class="filter-category">
+                    <h2 class="category-title">Symptômes</h2>
+                    <select class="multi-select" name="symptome" id="symptome" placeholder="Rechercher des symptomes" multiple>
+                        {% for symptome in symptomes %}
+                            <option value={{symptome.CodeSympt}}>{{symptome.Libelle}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <hr class="separator">
+                <div class="filter-category">
+                    <h2 class="category-title">Maladies</h2>
+                    <select class="multi-select" name="maladie" id="maladie" placeholder="Rechercher des maladies" multiple>
+                        {% for maladie in maladies %}
+                            <option value={{maladie.CodeMaladie}}>{{maladie.Libelle}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
-            <hr class="separator">
-            <div class="filter-category">
-                <h2 class="category-title">Formes</h2>
-                <div class="selectbox-container">
-                    {% for forme in formes %}
-                        <input type="radio" id="fo_{{forme.CodeForme}}" name="Formes" value={{forme.CodeForme}}>
-                        <label for="fo_{{forme.CodeForme}}">{{forme.Libelle}}</label>
-                    {% endfor %}
-                </div>
-            </div>
-            <hr class="separator">
-            <div class="filter-category">
-                <h2 class="category-title">Voies d'administration</h2>
-                <div class="selectbox-container">
-                    {% for va in voiesAdmin %}
-                        <input type="radio" id="va_{{va.CodeVoieAdmin}}" name="VA" value={{va.CodeVoieAdmin}}>
-                        <label for="va_{{va.CodeVoieAdmin}}">{{va.Libelle}}</label>
-                    {% endfor %}
-                </div>
-            </div>
-            <hr class="separator">
-            <div class="filter-category">
-                <h2 class="category-title">Symptômes</h2>
-                <select name="symptome" id="symptome" placeholder="Rechercher des symptomes" multiple>
-                    {% for symptome in symptomes %}
-                        <option value={{symptome.CodeSympt}}>{{symptome.Libelle}}</option>
-                    {% endfor %}
-                    <option value="lorem">Lorem</option>
-                    <option value="ipsum">Ipsum</option>
-                    <option value="dolor">Dolor</option>
-                </select>
-            </div>
-            <hr class="separator">
-            <div class="filter-category">
-                <h2 class="category-title">Maladies</h2>
-                <select name="maladie" id="maladie" placeholder="Rechercher des maladies" multiple>
-                    {% for maladie in maladies %}
-                        <option value={{maladie.CodeMaladie}}>{{maladie.Libelle}}</option>
-                    {% endfor %}
-                    <option value="lorem">Lorem</option>
-                    <option value="ipsum">Ipsum</option>
-                    <option value="dolor">Dolor</option>
-                </select>
-            </div>
+
             <button class="submit-filters" id="submit-filters">Valider</button>
         </div>
     </div>
     <div class="right-panel">
         <div class="panel-content">
-            <h1 class="products-title">Produits en stock</h1>
+            <div class="store-header">
+                <h1 class="products-title">Produits en stock</h1>
+                <div class="searchbar">
+                    <input type="text" class="search-input" placeholder="Rechercher par nom"/>
+                    <a class="search-icon" href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+                </div>
+            </div>
             <hr class="separator">
             <div class="store-view">
                 <form class="store-form" id="store_products">
                     {% for product in products %}
                         <div class="product" id="prod_{{product.CodeProd}}" prod-code={{product.CodeProd}}>
                             <div class="content">
-                                <div class="radioBtn-container">
-                                    <input type="radio" id="prodBtn_{{product.CodeProd}}" name="Products" value={{product.CodeProd}}>
+                                <div class="checkbox-container">
+                                    <input type="checkbox" id="prodBtn_{{product.CodeProd}}" name="Products" value={{product.CodeProd}}>
                                 </div>
                                 <img class="prod-image" src="" alt="Image d'illustration pour {{product.Libelle}}">
                                 <p class="prod-name">{{product.Libelle}}</p>
-                                <p class="prod-price">{{product.Prix}}€/boîte</p>
+                                <p class="prod-price">{{product.Prix|number_format(2, ',', ' ')}}€/boîte</p>
                             </div>
                         </div>
                     {% endfor %}
