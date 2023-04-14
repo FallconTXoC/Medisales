@@ -12,9 +12,19 @@ async function display(req, res) {
 
     res.render_data.js_files.push({
         src: "/js/store.js",
-        defer: true
+        defer: true,
+        type: "module"
     })
+    res.render_data.css_files.push(
+        {
+            src: "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+        },
+        {
+            src: "https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
+        }
+    )
     res.render_data.content = "store.twig";
+    res.render_data.selected_menu = "store";
     
     res.render_data.products = await StoreServiceInstance.getProducts();
     res.render_data.filters = await StoreServiceInstance.getFilters();

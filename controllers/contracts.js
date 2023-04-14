@@ -11,11 +11,27 @@ async function display(req, res) {
         isSocketInitialized = true;
     };
 
-    res.render_data.js_files.push({
-        src: "/js/contracts.js",
-        defer: true
-    })
+    res.render_data.js_files.push(
+        {
+            src: "/js/contracts.js",
+            defer: true,
+            type: "module"
+        },
+        {
+            src: "/js/libs/tabulator.min.js",
+            defer: false,
+            type: "text/javascript"
+        }
+    )
+    res.render_data.css_files.push(
+
+        {
+            src: "/css/libs/tabulator/tabulator_materialize.css"
+        }
+    )
     res.render_data.content = "contracts.twig";
+    res.render_data.selected_menu = "contracts";
+
     res.render_data.contracts = await ContractsServiceInstance.getContracts();
 
     res.render("main.twig", res.render_data);
