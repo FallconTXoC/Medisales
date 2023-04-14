@@ -56,7 +56,7 @@ class Contract {
 
     async saveContract(data) {
         return await new Promise((resolve, reject) => {
-            db.runPreparedQuery(`INSERT INTO Contrat VALUES(?,?,?,?,?,?,?,?)`, [data.id, data.codeClient, data.codeProd, data.userID, data.date, data.qtt, data.endDate, data.frequency], (err, result) => {
+            db.runPreparedQuery(`INSERT INTO Contrat VALUES(?,?,?,?,?,?,?,?)`, [data.id, data.clientID, data.productID, data.date, data.qtt, data.dateFin, data.frequency], (err, result) => {
                 if(err) return reject(err);
                 else return resolve(true);
             })

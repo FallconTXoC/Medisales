@@ -1,10 +1,17 @@
 const socketHelper = require("../utils/socket");
+const securityUtils = require("../utils/security");
+const uid = require('uniqid');
+
 const Contracts = require("../models/contract");
 const ContractsInstance = new Contracts();
-const CommonQueries = require("../utils/common_queries");
-const CommonQueriesInstance = new CommonQueries();
+
 const Client = require("../models/client");
 const ClientInstance = new Client();
+
+const Product = require("../models/products");
+const ProductInstance = new Product();
+
+const regex = securityUtils.regex();
 
 class ContractsService {
     constructor() {
@@ -66,12 +73,37 @@ class ContractsService {
     }
 
     async saveContract(data) {
-        //TODO : Générer un uid + traiter les données
+        const contractID = uid();
 
-        const client = await ClientInstance.findByName(data.clientName);
-        data["clientID"] = client ? client.CodeClient : ""; // TODO : générer un uid
+        let clientID;
+        const saveResult = saveClient(data.client);
+        if(typeof saveResult === 'object') return saveResult;
+        else clientID = saveResult;
+
+        const productID = securityUtils.validateString(data.productID);
+        if(productID === false) return {success: false, message: "Mauvais ID de produit"};
         
-        const result = await ContractsInstance.saveContract(data);
+        const qtt = data.qtt;
+        if(!(Number.isInteger(qtt) && qtt > 0)) return {success: false, message: "Mauvaise quantité"};
+
+        const contractDateFin = data.dateFin;
+        if(Object.prototype.toString.call(contractDateFin) !== '[object Date]')
+            return {success: false, message: "Mauvaise date de fin de contrat"};
+
+        const frequency = data.frequency;
+        if(!(Number.isInteger(frequency) && frequency > 0)) return {success: false, message: "Mauvaise fréquence de livraison"};
+        
+        const contractData = {
+            id: contractID,
+            clientID: clientID,
+            productID: productID,
+            date: new Date(),
+            qtt: qtt,
+            dateFin: contractDateFin,
+            frequency: frequency
+        }
+
+        const result = await ContractsInstance.saveContract(contractData);
 
         return result ? true : {success: false, message: "Erreur interne"};
     }
@@ -90,6 +122,38 @@ class ContractsService {
         else return {success: false, message: "Le contrat n'existe pas"};
 
         return result ? true : {success: false, message: "Erreur interne"};
+    }
+
+    async saveClient(clientData) {
+        let clientID;
+        if(clientData.exists === true) {
+            clientID = securityUtils.validateString(clientData.id, regex.idRegex);
+            if(clientID === false || await ClientInstance.findByID(clientID, false) !== true) 
+                return {success:false, message: "Mauvais ID client"};
+        }
+        else clientID = uid();
+
+        const clientName = securityUtils.validateString(clientData.clientName, regex.nameRegex);
+        if(clientName === false) return {success:false, message: "Mauvais nom de client"};
+
+        const clientType = securityUtils.validateString(clientData.type, regex.nameRegex);
+        if(clientType === false) return {success:false, message: "Mauvais type de client"};
+
+        const clientMail = securityUtils.validateString(clientData.mail, regex.mailRegex);
+        if(clientMail === false) return {success:false, message: "Mauvaise adresse mail cliente"};
+
+        const clientAddress = securityUtils.validateString(clientData.address, regex.postalAddressRegex);
+        if(clientAddress === false) return {success:false, message: "Mauvaise adresse postale du client"};
+
+        const clientCity = securityUtils.validateString(clientData.city, regex.nameRegex);
+        if(clientCity === false) return {success:false, message: "Mauvaise ville du client"};
+
+        const clientZipcode = securityUtils.validateString(clientData.zipcode, regex.zipcodeRegex);
+        if(clientCity === false) return {success:false, message: "Mauvais code postal du client"};
+
+        if(clientData.exists !== true) await ClientInstance.saveClient({clientID: clientID, clientName: clientName, clientType: clientType, clientMail: clientMail, clientAddress: clientAddress, clientCity: clientCity, clientZipcode: clientZipcode});
+
+        return clientID;
     }
 }
 

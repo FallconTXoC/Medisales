@@ -17,8 +17,6 @@ async function display(req, res) {
     res.render_data.content = "store.twig";
     res.render_data.products = await StoreServiceInstance.getProducts();
 
-    console.log(res.render_data.products)
-
     res.render("main.twig", res.render_data);
 }
 

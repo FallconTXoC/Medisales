@@ -2,6 +2,7 @@ const socketHelper = require("../utils/socket");
 const tokenHelper = require(`../utils/token`);
 const bcrypt = require('bcrypt');
 const User = require("../models/user");
+const securityUtils = require("../utils/security");
 
 class LoginService {
     constructor() {
@@ -12,7 +13,7 @@ class LoginService {
         io.on('connection', (socket) => {
             socket.on("signin", async (data) => {
                 const {username, password} = data;
-                const user = new User(username);
+                const user = new User(securityUtils.escapeHtml(username));
                 const userPass = await user.userExists() ? await user.getUserPass() : false;
                 const {lastname, firstname} = userPass ? await user.getNames() : {lastname: "", firstname: ""};
 

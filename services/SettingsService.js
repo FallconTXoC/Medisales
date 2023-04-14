@@ -2,6 +2,7 @@ const socketHelper = require("../utils/socket");
 const CommonQueries = require("../utils/common_queries");
 const CommonQueriesInstance = new CommonQueries();
 const User = require("../models/user");
+const securityUtils = require("../utils/security");
 
 class SettingsService {
     constructor() {}
@@ -17,8 +18,9 @@ class SettingsService {
 
     async applySettings(iduser, data) {
         // TODO : Filtrer les données
-        const userInstance = new User(iduser);
+        const id_user = securityUtils.escapeHtml(iduser);
 
+        const userInstance = new User(id_user);
         const result = userInstance.applySettings(data);
 
         return result ? true : {success: false, message: "Erreur interne"};
