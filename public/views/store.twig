@@ -59,7 +59,7 @@
                 </div>
             </div>
 
-            <button class="submit-filters" id="submit-filters">Valider</button>
+            <button class="submit-filters" id="submit-filters"><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
     </div>
     <div class="right-panel">
@@ -73,7 +73,7 @@
             </div>
             <hr class="separator">
             <div class="store-view">
-                <form class="store-form" id="store_products">
+                <form class="store-form" id="store_products" name="store_products">
                     {% for product in products %}
                         <div class="product" id="prod_{{product.CodeProd}}" prod-code={{product.CodeProd}}>
                             <div class="content">
@@ -86,9 +86,9 @@
                             </div>
                         </div>
                     {% endfor %}
-                    <button type="submit" class="contract-button" id="make-contract">Créer un contrat</button>
                 </form>
             </div>
+            <button type="submit" for="store_products" class="contract-button hidden" id="make-contract">Créer un contrat</button>
         </div>
     </div>
 </div>
