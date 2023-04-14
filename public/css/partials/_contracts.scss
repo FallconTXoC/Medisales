@@ -12,6 +12,7 @@
     height: calc(100% - 1.6vw);
 
     .contracts-panel {
+        position: relative;
         background: white;
         border-radius: 40px;
         width: 100%;
@@ -123,5 +124,34 @@
                 color: #F64C4C;
             }
         }
+    }
+}
+
+.contract-button {
+    position: absolute;
+    top: 89%;
+    right: 4%;
+
+    width: 2.5vw;
+    height: 2.5vw;
+
+    background: #d94444;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid #d94444;
+    border-radius: 30px;
+
+    cursor: pointer;
+
+    color: white;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 1vw;
+
+    &:hover {
+        background: lighten(#d94444, 5%);
+        border: 1px solid lighten(#d94444, 5%);
+    }
+    &.hidden {
+        visibility: hidden;
     }
 }

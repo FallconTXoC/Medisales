@@ -3,7 +3,7 @@ const ContractsServiceInstance = new ContractsService();
 const tokenHelper = require(`../utils/token`);
 let isSocketInitialized = false;
 
-module.exports = { display, showContract, saveContract, updateContract, deleteContract, getClients, getContracts, getClient };
+module.exports = { display, showContract, saveContract, updateContract, deleteContract, getClients, getContracts, getClient, deleteContracts };
 
 async function display(req, res) {
     if(isSocketInitialized === false) {
@@ -79,7 +79,6 @@ async function saveContract(req, res) {
         userID: cookies_data.id_user
     }
     const result = await ContractsServiceInstance.saveContract(data);
-    console.log(result)
 
     return (result === true)
         ? res.status(200).json({success: true})
@@ -96,6 +95,14 @@ async function updateContract(req, res) {
 
 async function deleteContract(req, res) {
     const result = await ContractsServiceInstance.deleteContract(req.body.id);
+
+    return (result === true)
+        ? res.status(200).json({success: true})
+        : res.status(400).json({success: false, error: result.message});
+}
+
+async function deleteContracts(req, res) {
+    const result = await ContractsServiceInstance.deleteContracts(req.body.contracts);
 
     return (result === true)
         ? res.status(200).json({success: true})

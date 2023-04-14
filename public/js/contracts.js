@@ -14,11 +14,13 @@ let contracts = {}
 let tableData = [];
 let contractID = "";
 let contractToDelete = "";
+let contractsToDelete = [];
 
 let table = new Tabulator("#contracts-table", {
+    selectable:true,
     layout:"fitColumns",
     columns:[
-        {formatter:"rowSelection", titleFormatter:"rowSelection", align:"center", width:70, headerSort:false},
+        {formatter:"rowSelection", titleFormatter:"rowSelection", width:70, headerSort:false},
         {title:"Nom client", field:"clientName"},
         {title:"Produit", field:"prodName"},
         {title:"Signature", field:"dateSignature", hozAlign:"left", sorter:"date"},
@@ -27,7 +29,66 @@ let table = new Tabulator("#contracts-table", {
         {formatter: frequency, title:"Fréquence", field:"freq", hozAlign:"left", sorter:"number"},
         {formatter: actionsButtons, title:"", field:"actions", hozAlign:"center", width:150, headerSort: false},
     ],
+    rowClick:function(e, row){
+        //e - the click event object
+        //row - row component
+
+        row.toggleSelect();
+    },
 });
+
+table.on('rowSelected', (e, row) => {
+    console.log(table.getSelectedData())
+    $('.contract-button').removeClass('hidden');
+})
+table.on('rowDeselected', (e, row) => {
+    if(table.getSelectedRows().length === 0) $('.contract-button').addClass('hidden');
+})
+$('#delete-contracts').on('click', () => {
+    contractsToDelete = table.getSelectedData();
+
+    let onOk = () => {
+        $.post('/contracts/deleteContracts', {contracts: contractsToDelete})
+        .done(() => {
+            $('#delete-contracts').addClass('hidden');
+            notifier.success("Les contrats ont été supprimés avec succès");
+            tableData = [];
+            getContracts();
+        })
+        .fail(function(xhr, status, err) {
+            let errorMessage;
+            try {
+                if(xhr.responseJSON.error.message) {
+                    errorMessage = xhr.responseJSON.error.message
+                } else {
+                    errorMessage = xhr.responseJSON.error;
+                }
+            } catch (e) {
+                errorMessage = "undefined error"
+            }
+            if(errorMessage) {
+                notifier.alert(errorMessage);
+                submitDone = false;
+            }
+        })
+    }
+    
+    let onCancel = () => {
+        contractsToDelete = [];
+    };
+    notifier.confirm(
+        "Êtes-vous sûr de vouloir supprimer ces contrats ?",
+        onOk,
+        onCancel,
+        {
+            labels: {
+                confirm: "Attention",
+                confirmOk: "Oui",
+                confirmCancel: "Annuler"
+            }
+        }
+    )
+})
 
 setupModal();
 await getContracts();
