@@ -1,0 +1,52 @@
+<div class="stats-content">
+    <div class="stats-container">
+        <div class="barchart panel">
+            <div class="box box-graph">
+                <div class="title-header">
+                    <h3>Évolution des ventes</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="donutchart panel">
+            <div class="box box-graph">
+                <div class="title-header">
+                    <h3>Contrats du mois</h3>
+                </div>
+                <div class="chart-container">
+                    <p class="salesNbr" id="salesNbr"></p>
+                    <p class="salesLibelle" id="salesLibelle"></p>
+                    <canvas id="contractsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-container">
+        <div class="goals panel">
+            <div class="box box-graph">
+                <div class="title-header">
+                    <h3>Objectif de la semaine</h3>
+                    <p id="goalLibelle">{{ objectif.libelle }}</p>
+                </div>
+                <div class="chart-container">
+                    <p class="salesNbr" id="goalSalesNbr"></p>
+                    <p class="salesLibelle" id="goalSalesLibelle"></p>
+                    <canvas id="goalChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="goalprogress panel">
+            <div class="box box-graph">
+                <div class="title-header">
+                    <h3>Avancement de l'objectif par l'équipe</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="goalTeamChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

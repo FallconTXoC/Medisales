@@ -77,6 +77,16 @@ class Contract {
             })
         })
     }
+
+    async getContractsByDate(userID, startDate, endDate) {
+        return await new Promise((resolve, reject) => {
+            console.log("querying")
+            db.runPreparedQuery(`SELECT * FROM Contrat WHERE Date >= ? AND Date <= ? AND ID_Utilisateur = ?`, [startDate, endDate, userID], (err, result) => {
+                if(err) return reject(err);
+                else return resolve(result);
+            });
+        })
+    }
 }
 
 module.exports = Contract;

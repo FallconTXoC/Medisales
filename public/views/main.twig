@@ -24,6 +24,7 @@
     <script src="/libs/socketio/socket.io.js"></script>
     <script src="/libs/jquery/jquery.js"></script>
     <script src="/libs/jquery/jqueryui.js"></script>
+    <script src="/js/libs/chart.min.js"></script>
     <script src="/js/libs/index.var.js"></script> <!-- Awesome notifications -->
     {# {% if disable.notifications is not defined %}
         <script src="/js/notifications.js"></script>
@@ -52,7 +53,7 @@
                         <div class="navlist">
                             <a class="med-box {% if selected_menu == "store" %}active{% endif %}" href="/store"></a>
                             <a class="med-contracts {% if selected_menu == "contracts" %}active{% endif %}" href="/contracts"></a>
-                            <a class="med-stats {% if selected_menu == "stats" %}active{% endif %}" href="#"></a>
+                            <a class="med-stats {% if selected_menu == "stats" %}active{% endif %}" href="/statistics"></a>
                         </div>
                     </nav>
                 </div>
