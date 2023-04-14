@@ -11,7 +11,7 @@
                     <h2 class="category-title">Principes actifs</h2>
                     <select class="multi-select" name="principesActifs" id="principesActifs" placeholder="Rechercher des principes actifs" multiple>
                         {% for pa in filters.principesActifs %}
-                            <option value={{pa.CodeMol}}>{{pa.Libelle}}</option>
+                        <option value={{pa.CodeMol}}>{{pa.Libelle}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -44,7 +44,7 @@
                     <h2 class="category-title">Symptômes</h2>
                     <select class="multi-select" name="symptome" id="symptome" placeholder="Rechercher des symptomes" multiple>
                         {% for symptome in filters.symptomes %}
-                            <option value={{symptome.CodeSympt}}>{{symptome.Libelle}}</option>
+                        <option value={{symptome.CodeSympt}}>{{symptome.Libelle}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -53,7 +53,7 @@
                     <h2 class="category-title">Maladies</h2>
                     <select class="multi-select" name="maladie" id="maladie" placeholder="Rechercher des maladies" multiple>
                         {% for maladie in filters.maladies %}
-                            <option value={{maladie.CodeMaladie}}>{{maladie.Libelle}}</option>
+                        <option value={{maladie.CodeMaladie}}>{{maladie.Libelle}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -75,16 +75,16 @@
             <div class="store-view">
                 <form class="store-form" id="store_products" name="store_products">
                     {% for product in products %}
-                        <div class="product" id="prod_{{product.CodeProd}}" prod-code={{product.CodeProd}}>
-                            <div class="content">
-                                <div class="checkbox-container">
-                                    <input type="checkbox" id="prodBtn_{{product.CodeProd}}" name="Products" value={{product.CodeProd}}>
-                                </div>
-                                <img class="prod-image" src="" alt="Image d'illustration pour {{product.Libelle}}">
-                                <p class="prod-name">{{product.Libelle}}</p>
-                                <p class="prod-price">{{product.Prix|number_format(2, ',', ' ')}}€/boîte</p>
+                    <div class="product" id="prod_{{product.CodeProd}}" prod-code={{product.CodeProd}}>
+                        <div class="content">
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="prodBtn_{{product.CodeProd}}" name="Products" value={{product.CodeProd}}>
                             </div>
+                            <img class="prod-image" src="" alt="Image d'illustration pour {{product.Libelle}}">
+                            <p class="prod-name">{{product.Libelle}}</p>
+                            <p class="prod-price">{{product.Prix|number_format(2, ',', ' ')}}€/boîte</p>
                         </div>
+                    </div>
                     {% endfor %}
                 </form>
             </div>
