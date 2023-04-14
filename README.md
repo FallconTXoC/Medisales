@@ -62,7 +62,7 @@ DEBUG    // boolean, if true database queries will be logged
 🇬🇧 Either use `insert_users.sql` script in `database_utils` to quickly use accounts or make ones by yourself, beware that the password must be encrypted using BCrypt.  
 Accounts in `insert_users.sql` have the same password : `pass123`.
 
-🇫🇷 Il est possible d'utiliser `insert_users.sql` dans `database_utils` pour utiliser des comptes précréés ou d'insérer manuellement des comptes. Il est important de noter que les mots de passe doivent être chiffrés en utilisant BCrypt.  
+🇫🇷 Il est possible d'utiliser `insert_users.sql` dans `database_utils`, pour utiliser des comptes précréés, ou d'insérer manuellement des comptes. Notez que les mots de passe doivent être chiffrés en utilisant BCrypt.  
 Les comptes présents dans le script partagent le même mot de passe : `pass123`.
 
 ## Documentation
