@@ -12,8 +12,11 @@ class StoreService {
         const io = socketHelper.getSockets();
         io.on('connection', (socket) => {
             socket.on("getSortedProducts", async (data) => {
-                io.emit("sendSortedProducts", await getSortedProducts(data));
+                io.emit("sendProducts", await this.getSortedProducts(data));
             });
+            socket.on("findByName", async (data) => {
+                io.emit("sendProducts", await this.findProductsByName(data));
+            })
         });
     }
 
@@ -21,25 +24,12 @@ class StoreService {
         return await ProductsInstance.getProducts();
     }
 
-    async getPrincipesActifs() {
-        return await ProductsInstance.getAllPrincipesActifs();
+    async getFilters() {
+        return await ProductsInstance.getFilters();
     }
 
-    async getFormes() {
-        return await ProductsInstance.getAllFormes();
-
-    }
-
-    async getVoiesAdmin() {
-        return await ProductsInstance.getAllVoiesAdmin();
-    }
-
-    async getSymptomes() {
-        return await ProductsInstance.getAllSymptomes();
-    }
-
-    async getMaladies() {
-        return await ProductsInstance.getAllMaladies();
+    async findProductsByName(name) {
+        return await ProductsInstance.findByName(name);
     }
 
     async getSortedProducts(data) {
@@ -54,37 +44,37 @@ class StoreService {
                 name: "Produit",
                 propertyCode: "CodeProd"
             },
-            tables: {
+            criterias: {
                 Symptome: {
-                    name: "Prod_Usage",
+                    table_name: "Prod_Usage",
                     keyword: "pu",
                     propertyCode: "CodeSympt",
                     values: symptomes,
                     isInternal: false
                 },
                 PrincipeActif: {
-                    name: "Prod_Contient",
+                    table_name: "Prod_Contient",
                     keyword: "pc",
                     propertyCode: "CodeMol",
                     values: principesActifs,
                     isInternal: false
                 },
                 Maladie: {
-                    name: "Prod_Combat",
+                    table_name: "Prod_Combat",
                     keyword: "pco",
                     propertyCode: "CodeMaladie",
                     values: maladies,
                     isInternal: false
                 },
                 Forme: {
-                    name: "Produit",
+                    table_name: "Produit",
                     keyword: "p",
                     propertyCode: "CodeForme",
                     values: forme,
                     isInternal: true
                 },
                 VoieAdmin: {
-                    name: "Produit",
+                    table_name: "Produit",
                     keyword: "p",
                     propertyCode: "CodeVoieAdmin",
                     values: voieAdmin,

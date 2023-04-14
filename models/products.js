@@ -20,7 +20,7 @@ class Products {
             let param = [`${name}%`]
             db.runPreparedQuery(`SELECT * FROM Produit WHERE Libelle LIKE ?`, param, (err, result) => {
                 if(err) return reject(err);
-                else return resolve(result[0]);
+                else return resolve(result);
             });
         })
     }
@@ -88,47 +88,45 @@ class Products {
         })
     }
 
-    async getAllPrincipesActifs() {
+    async getFilters() {
         return await new Promise((resolve, reject) => {
+            let filters = {};
+
             db.runQuery(`SELECT * FROM PrincipeActif`, (err, result) => {
                 if(err) return reject(err);
-                else return resolve(result);
-            })
-        })
-    }
+                else {
+                    filters["principesActifs"] = (result);
 
-    async getAllFormes() {
-        return await new Promise((resolve, reject) => {
-            db.runQuery(`SELECT * FROM Forme`, (err, result) => {
-                if(err) return reject(err);
-                else return resolve(result);
-            })
-        })
-    }
+                    db.runQuery(`SELECT * FROM Forme`, (err, result) => {
+                        if(err) return reject(err);
+                        else {
+                            filters["formes"] = (result);
 
-    async getAllVoiesAdmin() {
-        return await new Promise((resolve, reject) => {
-            db.runQuery(`SELECT * FROM VoieAdmin`, (err, result) => {
-                if(err) return reject(err);
-                else return resolve(result);
-            })
-        })
-    }
+                            db.runQuery(`SELECT * FROM VoieAdmin`, (err, result) => {
+                                if(err) return reject(err);
+                                else {
+                                    filters["voiesAdmin"] = (result);
 
-    async getAllSymptomes() {
-        return await new Promise((resolve, reject) => {
-            db.runQuery(`SELECT * FROM Symptome`, (err, result) => {
-                if(err) return reject(err);
-                else return resolve(result);
-            })
-        })
-    }
+                                    db.runQuery(`SELECT * FROM Symptome`, (err, result) => {
+                                        if(err) return reject(err);
+                                        else {
+                                            filters["symptomes"] = (result);
 
-    async getAllMaladies() {
-        return await new Promise((resolve, reject) => {
-            db.runQuery(`SELECT * FROM Maladie`, (err, result) => {
-                if(err) return reject(err);
-                else return resolve(result);
+                                            db.runQuery(`SELECT * FROM Maladie`, (err, result) => {
+                                                if(err) return reject(err);
+                                                else {
+                                                    filters["maladies"] = (result);
+
+                                                    return resolve(filters);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
             });
         })
     }

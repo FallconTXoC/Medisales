@@ -10,7 +10,7 @@
                 <div class="filter-category">
                     <h2 class="category-title">Principes actifs</h2>
                     <select class="multi-select" name="principesActifs" id="principesActifs" placeholder="Rechercher des principes actifs" multiple>
-                        {% for pa in principesActifs %}
+                        {% for pa in filters.principesActifs %}
                             <option value={{pa.CodeMol}}>{{pa.Libelle}}</option>
                         {% endfor %}
                     </select>
@@ -19,7 +19,7 @@
                 <div class="filter-category">
                     <h2 class="category-title">Formes</h2>
                     <div class="selectbox-container">
-                        {% for forme in formes %}
+                        {% for forme in filters.formes %}
                         <div class="filter-option">
                             <input type="checkbox" class="filter-checkbox" id="fo_{{forme.CodeForme}}" name="Formes" value={{forme.CodeForme}}>
                             <label for="fo_{{forme.CodeForme}}">{{forme.Libelle}}</label>
@@ -31,7 +31,7 @@
                 <div class="filter-category">
                     <h2 class="category-title">Voies d'administration</h2>
                     <div class="selectbox-container">
-                        {% for va in voiesAdmin %}
+                        {% for va in filters.voiesAdmin %}
                         <div class="filter-option">
                             <input type="checkbox" class="filter-checkbox" id="va_{{va.CodeVoieAdmin}}" name="VA" value={{va.CodeVoieAdmin}}>
                             <label for="va_{{va.CodeVoieAdmin}}">{{va.Libelle}}</label>
@@ -43,7 +43,7 @@
                 <div class="filter-category">
                     <h2 class="category-title">Symptômes</h2>
                     <select class="multi-select" name="symptome" id="symptome" placeholder="Rechercher des symptomes" multiple>
-                        {% for symptome in symptomes %}
+                        {% for symptome in filters.symptomes %}
                             <option value={{symptome.CodeSympt}}>{{symptome.Libelle}}</option>
                         {% endfor %}
                     </select>
@@ -52,7 +52,7 @@
                 <div class="filter-category">
                     <h2 class="category-title">Maladies</h2>
                     <select class="multi-select" name="maladie" id="maladie" placeholder="Rechercher des maladies" multiple>
-                        {% for maladie in maladies %}
+                        {% for maladie in filters.maladies %}
                             <option value={{maladie.CodeMaladie}}>{{maladie.Libelle}}</option>
                         {% endfor %}
                     </select>
