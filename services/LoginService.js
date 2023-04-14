@@ -8,6 +8,9 @@ class LoginService {
     constructor() {
     }
 
+    /**
+     * Initialize sockets for the current instance.
+     */
     initSocket() {
         const io = socketHelper.getSockets();
         io.on('connection', (socket) => {
@@ -19,10 +22,13 @@ class LoginService {
 
                 if(userPass === false) io.emit(`signin`, {success: false, message: "Utilisateur inexistant"});
                 else {
-                    bcrypt.compare(password, userPass, async function(err, result) {    
+                    console.log('\x1b[33m%s\x1b[0m', userPass);
+                    console.log('\x1b[33m%s\x1b[0m', password);
+                    bcrypt.compare(password, userPass, async function(err, result) {   
                         if(err) throw err;
                         else {
                             if(result) {
+                                console.log('\x1b[34m%s\x1b[0m', result);
                                 const tokenCookie = await tokenHelper.createToken({
                                     id_user: username,
                                     firstname: firstname,

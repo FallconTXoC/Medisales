@@ -11,6 +11,9 @@ class StoreService {
     constructor() {
     }
 
+    /**
+     * Initialize sockets for the current instance.
+     */
     initSocket() {
         const io = socketHelper.getSockets();
         io.on('connection', (socket) => {
@@ -23,18 +26,40 @@ class StoreService {
         });
     }
 
+    /**
+     * Retrieves all products.
+     * @returns {object} products
+     */
     async getProducts() {
         return await ProductsInstance.getProducts();
     }
 
+    /**
+     * Retrieves all usable filters for the store page
+     * @returns {object} filters
+     */
     async getFilters() {
         return await ProductsInstance.getFilters();
     }
 
+    /**
+     * Retrieves all products with a name beginning by or being
+     * the specified name.
+     * 
+     * @param {string} name 
+     * @returns {object} products
+     */
     async findProductsByName(name) {
         return await ProductsInstance.findByName(name);
     }
 
+    /**
+     * Retrieves a product based on its ID.
+     * Returns object with error message on invalid data.
+     * 
+     * @param {string} id 
+     * @returns {Object} error or product
+     */
     async getProduct(id) {
         const productID = securityUtils.validateString(id, regex.idRegex);
         if(productID === false) return {success: false, message: "Mauvais ID de produit"};
@@ -42,6 +67,14 @@ class StoreService {
         return await ProductsInstance.findByID(id);
     }
 
+    /**
+     * Creates an object containing the necessary information for the
+     * sorting based on received data and following the data pattern explained
+     * in the sortObjects function of common queries.
+     * 
+     * @param {object} data [symptomes, principesActifs, maladies, forme, voieAdmin]
+     * @returns {object} sorted products
+     */
     async getSortedProducts(data) {
         const symptomes = data.symptomes ?? [];
         const principesActifs = data.principesActifs ?? [];
@@ -96,6 +129,12 @@ class StoreService {
         return await CommonQueriesInstance.sortObjects(tablesData);
     }
 
+    /**
+     * Retrieves all related information of a product based on its ID.
+     * 
+     * @param {string} idprod 
+     * @returns {object} product data
+     */
     async getProductInfo(idprod) {
         let data = {
             produit: await ProductsInstance.findByID(idprod),

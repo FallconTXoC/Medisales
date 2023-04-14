@@ -10,6 +10,9 @@ class StatsService {
     constructor() {
     }
 
+    /**
+     * Initialize sockets for the current instance.
+     */
     initSocket() {
         const io = socketHelper.getSockets();
         io.on('connection', (socket) => {
@@ -17,6 +20,12 @@ class StatsService {
         });
     }
 
+    /**
+     * Retrieves contracts of the running week for the specified user.
+     * 
+     * @param {string} userID 
+     * @returns {object} contracts
+     */
     async getWeekContracts(userID) {
         const curr = new Date;
         const day = curr;
@@ -26,6 +35,12 @@ class StatsService {
         return await ContractsInstance.getContractsByDate(userID, firstday, lastday);
     }
 
+    /**
+     * Retrieves contracts of the running month for the specified user.
+     * 
+     * @param {string} memberID 
+     * @returns {object} contracts
+     */
     async getMemberContracts(memberID) {
         const date = new Date();
         const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -34,12 +49,24 @@ class StatsService {
         return await ContractsInstance.getContractsByDate(memberID, firstDay, lastDay);
     }
 
+    /**
+     * Retrieves all members of the specified user's team.
+     * 
+     * @param {string} userID 
+     * @returns {object} team members
+     */
     async getTeamMembers(userID) {
         const user = await new User(userID).getUser();
 
         return await user.getTeamMembers(user.equipe);
     }
 
+    /**
+     * Retrieves the current goal of the week for the specified user.
+     * 
+     * @param {string} userID 
+     * @returns {object} goal
+     */
     async getWeekGoal(userID) {
         const curr = new Date;
         const day = curr;

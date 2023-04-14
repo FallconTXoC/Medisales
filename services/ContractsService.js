@@ -15,6 +15,9 @@ class ContractsService {
     constructor() {
     }
 
+    /**
+     * Initialize sockets for the current instance.
+     */
     initSocket() {
         const io = socketHelper.getSockets();
         io.on('connection', (socket) => {
@@ -24,26 +27,63 @@ class ContractsService {
         });
     }
 
+    /**
+     * Retrieves all contracts in the database.
+     * 
+     * @returns {object} contracts
+     */
     async getContracts() {
         return await ContractsInstance.getContracts();
     }
 
+    /**
+     * Retrieves all contracts of the specified user.
+     * 
+     * @param {string} userID 
+     * @returns {object} contracts
+     */
     async getUserContracts(userID) {
         return await ContractsInstance.getUserContracts(userID);
     }
 
+    /**
+     * Retrieves all clients in the database.
+     * @returns {object} clients
+     */
     async getClients() {
         return await ClientInstance.getClients();
     }
 
+    /**
+     * Retrieves client by its ID and returns true if getData = false
+     * or an object with the client's data otherwise.
+     * 
+     * @param {string} id 
+     * @param {bool} getData 
+     * @returns Object or bool
+     */
     async getClientByID(id, getData) {
         return await ClientInstance.findByID(id, getData);
     }
 
+    /**
+     * Retrieves all contracts of the specified user.
+     * 
+     * @param {string} userID 
+     * @returns {object} contracts
+     */
     async getUserContracts(userID) {
         return await ContractsInstance.getContractsByUserID(userID);
     }
 
+    /**
+     * Creates an object containing the necessary information for the
+     * sorting based on received data and following the data pattern explained
+     * in the sortObjects function of common queries.
+     * 
+     * @param {object} data [dates, clients, produits]
+     * @returns {object} sorted contracts
+     */
     async getSortedContracts(data) {
         const dates = data.dates ?? [];
         const clients = data.clients ?? [];
@@ -82,10 +122,23 @@ class ContractsService {
         return await ContractsInstance.sortContracts(tablesData);
     }
 
+    /**
+     * Retrieves all information of the specified contract.
+     * 
+     * @param {string} idContract 
+     * @returns {object} contract data
+     */
     async getContractInfo(idContract) {
         return await ContractsInstance.findByID(idContract)
     }
 
+    /**
+     * Creates a contract after validating the client's information
+     * Returns object with error message on invalid data
+     * 
+     * @param {object} data
+     * @return Object or true
+     */
     async saveContract(data) {
         const contractID = uid();
 
@@ -114,13 +167,18 @@ class ContractsService {
         return result ? true : {success: false, message: "Erreur interne"};
     }
 
+    /**
+     * Updates existing contract after validating data
+     * Returns object with error message on invalid data
+     * 
+     * @param {object} data 
+     * @returns Object or true
+     */
     async updateContract(data) {
         const contractID = securityUtils.validateString(data.id, regex.idRegex);
         if(contractID === false || await ContractsInstance.contractExists(contractID) === false) return {success: false, message: "Mauvais ID de contrat"};
 
         const contract = await ContractsInstance.findByID(contractID);
-
-        console.log(data)
 
         let qtt = parseInt(data.qtt);
         if(data.qtt === '') qtt = contract.QTT;
@@ -149,6 +207,14 @@ class ContractsService {
         return result ? true : {success: false, message: "Erreur interne"};
     }
 
+
+    /**
+     * Deletes a contract after validating data
+     * Returns object with error message on invalid data
+     * 
+     * @param {string} id 
+     * @returns Object or true
+     */
     async deleteContract(id) {
         let result;
         if(await ContractsInstance.contractExists(id) !== false) result = await ContractsInstance.deleteContract(id);
@@ -157,6 +223,13 @@ class ContractsService {
         return result ? true : {success: false, message: "Erreur interne"};
     }
 
+    /**
+     * Deletes multiple contracts after validating data
+     * Returns object with error message on invalid data
+     * 
+     * @param {object} contracts 
+     * @returns Object or true
+     */
     async deleteContracts(contracts) {
         let result;
 
@@ -171,6 +244,16 @@ class ContractsService {
         return result ? true : {success: false, message: "Erreur interne"};
     }
 
+    /**
+     * Checks if the client exists by the presence of "exists" bool in clientData
+     * and its ID, if exists = false saves client data after validation, else
+     * checks the database and return object with error message if he doesn't exist.
+     * 
+     * Returns object with error message on invalid data
+     * 
+     * @param {object} clientData 
+     * @returns {string} clientID
+     */
     async saveClient(clientData) {
         let clientID;
         if(clientData.exists === 'true') {
