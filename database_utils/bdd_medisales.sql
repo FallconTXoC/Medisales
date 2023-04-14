@@ -194,7 +194,7 @@ CREATE TABLE Prod_Combat(
 
 INSERT INTO Forme VALUES("SOL","Solide","Forme solide");
 INSERT INTO Forme VALUES("LIQ","Liquide","Forme liquide");
-INSERT INTO Forme VALUES("LYO","Lyoc","Forme lyoc (comprimé sublingual)");
+INSERT INTO Forme VALUES("LYO","Lyoc","Forme lyoc (comprimï¿½ sublingual)");
 
 
 INSERT INTO VoieAdmin VALUES("ORL","Orale","Administration par la bouche");
@@ -205,23 +205,23 @@ INSERT INTO VoieAdmin VALUES("GTT","Gouttes","Administration par gouttes");
 INSERT INTO VoieAdmin VALUES("PNAS","Per-nasale","Administration par le nez");
 
 
-INSERT INTO Symptome VALUES("FVR","Fièvre","Friève légère à modérée");
+INSERT INTO Symptome VALUES("FVR","Fiï¿½vre","Friï¿½ve lï¿½gï¿½re ï¿½ modï¿½rï¿½e");
 INSERT INTO Symptome VALUES("TXGRA","Toux grasse","Toux grasse");
-INSERT INTO Symptome VALUES("TXSEC","Toux sèche","Toux sèche");
-INSERT INTO Symptome VALUES("MXTT_G","Maux de tête graves","Maux de tête forts");
-INSERT INTO Symptome VALUES("MXABDO","Douleurs abdominales","Douleurs abdominales légères à modérées");
-INSERT INTO Symptome VALUES("MXTT_LM","Maux de tête légers/modérés","Maux de tête légers à modérés");
-INSERT INTO Symptome VALUES("DIAR","Diarrhée","Diarrhée");
+INSERT INTO Symptome VALUES("TXSEC","Toux sï¿½che","Toux sï¿½che");
+INSERT INTO Symptome VALUES("MXTT_G","Maux de tï¿½te graves","Maux de tï¿½te forts");
+INSERT INTO Symptome VALUES("MXABDO","Douleurs abdominales","Douleurs abdominales lï¿½gï¿½res ï¿½ modï¿½rï¿½es");
+INSERT INTO Symptome VALUES("MXTT_LM","Maux de tï¿½te lï¿½gers/modï¿½rï¿½s","Maux de tï¿½te lï¿½gers ï¿½ modï¿½rï¿½s");
+INSERT INTO Symptome VALUES("DIAR","Diarrhï¿½e","Diarrhï¿½e");
 INSERT INTO Symptome VALUES("CSTIP","Constipation","Constipation");
 
 
-INSERT INTO PrincipeActif VALUES("DISMCTT","Diosmectite","Silicate double d aluminium et de magnésium, structure en feuillets et viscosité plastique élevée");
+INSERT INTO PrincipeActif VALUES("DISMCTT","Diosmectite","Silicate double d aluminium et de magnï¿½sium, structure en feuillets et viscositï¿½ plastique ï¿½levï¿½e");
 INSERT INTO PrincipeActif VALUES("AMMCHLOR","Ammonii chloridium","Chlorure d amonium, irrite les muqueuses et les bronches");
-INSERT INTO PrincipeActif VALUES("GUAFNSN","Guaïfénésine","Expectorant pour les glaires");
-INSERT INTO PrincipeActif VALUES("CRBCYSN","Carbocystéine","Mucolytique dérivé d acide aminé soufré");
-INSERT INTO PrincipeActif VALUES("SMTRIPT","Sumatriptan","Biodisponibilité faible");
+INSERT INTO PrincipeActif VALUES("GUAFNSN","Guaï¿½fï¿½nï¿½sine","Expectorant pour les glaires");
+INSERT INTO PrincipeActif VALUES("CRBCYSN","Carbocystï¿½ine","Mucolytique dï¿½rivï¿½ d acide aminï¿½ soufrï¿½");
+INSERT INTO PrincipeActif VALUES("SMTRIPT","Sumatriptan","Biodisponibilitï¿½ faible");
 INSERT INTO PrincipeActif VALUES("PHLORGLCNL","Phloroglucinol","Antispasmodique");
-INSERT INTO PrincipeActif VALUES("LOPRMD","Lopéramide","Antidiarrhéique, agoniste opioïde des récepteurs µ");
+INSERT INTO PrincipeActif VALUES("LOPRMD","Lopï¿½ramide","Antidiarrhï¿½ique, agoniste opioï¿½de des rï¿½cepteurs ï¿½");
 INSERT INTO PrincipeActif VALUES("ANTHRQNN","Anthraquinone","Hydrocarbure aromatique polycyclique");
 
 
@@ -229,19 +229,19 @@ INSERT INTO Maladie VALUES("GRPA","Grippe type A","Virus grippaux A(H1N1) et A(H
 INSERT INTO Maladie VALUES("GRPB","Grippe type B","Virus grippaux B/Yamagata et B/Victoria");
 INSERT INTO Maladie VALUES("GRPC","Grippe type C","Virus grippaux de type C");
 INSERT INTO Maladie VALUES("BRCHT","Bronchite","Inflammation des bronches");
-INSERT INTO Maladie VALUES("RHINPHRGT","Rhinopharyngite","Infection virale avec écoulements nasaux");
-INSERT INTO Maladie VALUES("MIGRN","Migraine","Mal de tête pulsatile");
-INSERT INTO Maladie VALUES("GASTRENT","Grastro-entérite","Inflammation de la paroi de l estomac et de l intestin");
-INSERT INTO Maladie VALUES("CONSTPTN","Constipation","Difficultées d évacuation des déchets intestinaux");
+INSERT INTO Maladie VALUES("RHINPHRGT","Rhinopharyngite","Infection virale avec ï¿½coulements nasaux");
+INSERT INTO Maladie VALUES("MIGRN","Migraine","Mal de tï¿½te pulsatile");
+INSERT INTO Maladie VALUES("GASTRENT","Grastro-entï¿½rite","Inflammation de la paroi de l estomac et de l intestin");
+INSERT INTO Maladie VALUES("CONSTPTN","Constipation","Difficultï¿½es d ï¿½vacuation des dï¿½chets intestinaux");
 
 
 INSERT INTO Produit VALUES("P0001","Miraculus","Pour tout, partout. Avec Miraculus la maladie n est plus !","1000","ORL","SOL");
 INSERT INTO Produit VALUES("P0002","Abracadicus","Pour tous, partout. Avec Abracadicus la maladie n est presque plus !","600","ORL","LIQ");
 INSERT INTO Produit VALUES("P0003","Magimicinal","Pour presque tout, presque partout. De la magie ? Non, de la science !","400","PNAS","LIQ");
-INSERT INTO Produit VALUES("P0004","Oudinimatol","Une maladie, un symptôme ? Hop ! Plus là.","250.4","GTT","LIQ");
-INSERT INTO Produit VALUES("P0005","Vidtou","Même l A86 ne résisterait pas à son effet !","110.3","ANL","SOL");
-INSERT INTO Produit VALUES("P0006","Plumalocrane","Pour toutes ces fois où un marteau vous attaque la tête !","140","LYOPH","SOL");
-INSERT INTO Produit VALUES("P0007","Bouchtou","Au cas où vous abusiez du Vidtou.","200.56","ANL","SOL");
+INSERT INTO Produit VALUES("P0004","Oudinimatol","Une maladie, un symptï¿½me ? Hop ! Plus lï¿½.","250.4","GTT","LIQ");
+INSERT INTO Produit VALUES("P0005","Vidtou","Mï¿½me l A86 ne rï¿½sisterait pas ï¿½ son effet !","110.3","ANL","SOL");
+INSERT INTO Produit VALUES("P0006","Plumalocrane","Pour toutes ces fois oï¿½ un marteau vous attaque la tï¿½te !","140","LYOPH","SOL");
+INSERT INTO Produit VALUES("P0007","Bouchtou","Au cas oï¿½ vous abusiez du Vidtou.","200.56","ANL","SOL");
 
 
 INSERT INTO Prod_Contient VALUES ("P0001","AMMCHLOR");
@@ -308,8 +308,8 @@ INSERT INTO Prod_Combat VALUES ("P0005","CONSTPTN");
 INSERT INTO Prod_Combat VALUES ("P0006","MIGRN");
 INSERT INTO Prod_Combat VALUES ("P0007","GASTRENT");
 
-CREATE USER 'medisales_server' IDENTIFIED BY 'KzvyfaJ#2R9BR[+';
-GRANT SELECT ON Medisales.* TO medisales_server;
-GRANT INSERT ON Medisales.* TO medisales_server;
-GRANT UPDATE ON Medisales.* TO medisales_server;
-GRANT DELETE ON Medisales.* TO medisales_server;
+CREATE USER 'medisales_server'@'%' IDENTIFIED BY 'KzvyfaJ%2R9BR!+';
+GRANT INSERT ON Medisales.* TO 'medisales_server'@'%';
+GRANT SELECT ON Medisales.* TO 'medisales_server'@'%';
+GRANT UPDATE ON Medisales.* TO 'medisales_server'@'%';
+GRANT DELETE ON Medisales.* TO 'medisales_server'@'%';

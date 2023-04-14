@@ -2,6 +2,19 @@ const jwt = require(`jsonwebtoken`);
 
 module.exports = {
     /**
+     * Decrypt a token
+     * @param {string} token - Token to be decrypted REQUIRED
+     * @return {object} - Decrypted data
+     */
+         decryptToken: async (token) => {
+            return await new Promise((resolve) => {
+                jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+                    if (err) return console.log(err)
+                    resolve(decoded)
+                })
+            })
+        },
+    /**
      * Patch token to edit data
      * @param {string} token - Token to be patched REQUIRED
      * @param {object} data - Data to be patched REQUIRED

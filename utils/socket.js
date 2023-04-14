@@ -1,3 +1,4 @@
+const { Server } = require("socket.io");
 let io;
 
 module.exports = {

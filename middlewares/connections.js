@@ -1,6 +1,6 @@
 const tokenHelper = require("../utils/token");
 const jwt = require("jsonwebtoken");
-const User = require("../models/user")
+const User = require("../models/user");
 
 module.exports = {
     isConnected: async function(req, res, next){
