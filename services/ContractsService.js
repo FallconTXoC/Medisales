@@ -8,9 +8,6 @@ const ContractsInstance = new Contracts();
 const Client = require("../models/client");
 const ClientInstance = new Client();
 
-const Product = require("../models/products");
-const ProductInstance = new Product();
-
 const regex = securityUtils.regex();
 
 class ContractsService {
@@ -28,6 +25,10 @@ class ContractsService {
 
     async getContracts() {
         return await ContractsInstance.getContracts();
+    }
+
+    async getUserContracts(userID) {
+        return await ContractsInstance.getContractsByUserID(userID);
     }
 
     async getSortedContracts(data) {
@@ -68,19 +69,19 @@ class ContractsService {
         return await ContractsInstance.sortContracts(tablesData);
     }
 
-    async getContractInfo(idprod) {
-        return await ContractsInstance.findByID(idprod)
+    async getContractInfo(idContract) {
+        return await ContractsInstance.findByID(idContract)
     }
 
     async saveContract(data) {
         const contractID = uid();
 
         let clientID;
-        const saveResult = saveClient(data.client);
+        const saveResult = await saveClient(data.client);
         if(typeof saveResult === 'object') return saveResult;
         else clientID = saveResult;
 
-        const productID = securityUtils.validateString(data.productID);
+        const productID = securityUtils.validateString(data.productID, regex.idRegex);
         if(productID === false) return {success: false, message: "Mauvais ID de produit"};
         
         const qtt = data.qtt;
@@ -96,6 +97,7 @@ class ContractsService {
         const contractData = {
             id: contractID,
             clientID: clientID,
+            userID: data.userID,
             productID: productID,
             date: new Date(),
             qtt: qtt,
@@ -109,16 +111,38 @@ class ContractsService {
     }
 
     async updateContract(data) {
-        //TODO : traiter les données
+        const contractID = securityUtils.validateString(data.id, regex.idRegex);
+        if(contractID === false || await ContractsInstance.contractExists(contractID) === false) return {success: false, message: "Mauvais ID de contrat"};
 
-        const result = await ContractsInstance.updateContract(data);
+        const productID = securityUtils.validateString(data.productID, regex.idRegex);
+        if(productID === false) return {success: false, message: "Mauvais ID de produit"};
+
+        const qtt = data.qtt;
+        if(!(Number.isInteger(qtt) && qtt > 0)) return {success: false, message: "Mauvaise quantité"};
+
+        const contractDateFin = data.dateFin;
+        if(Object.prototype.toString.call(contractDateFin) !== '[object Date]')
+            return {success: false, message: "Mauvaise date de fin de contrat"};
+
+        const frequency = data.frequency;
+        if(!(Number.isInteger(frequency) && frequency > 0)) return {success: false, message: "Mauvaise fréquence de livraison"};
+
+        const contractData = {
+            id: contractID,
+            productID: productID,
+            qtt: qtt,
+            dateFin: contractDateFin,
+            frequency: frequency
+        }
+        
+        const result = await ContractsInstance.updateContract(contractData);
 
         return result ? true : {success: false, message: "Erreur interne"};
     }
 
     async deleteContract(id) {
         let result;
-        if(await ContractsInstance.contractExists(id) === true) result = await ContractsInstance.deleteContract(id);
+        if(await ContractsInstance.contractExists(id) !== false) result = await ContractsInstance.deleteContract(id);
         else return {success: false, message: "Le contrat n'existe pas"};
 
         return result ? true : {success: false, message: "Erreur interne"};
@@ -133,10 +157,10 @@ class ContractsService {
         }
         else clientID = uid();
 
-        const clientName = securityUtils.validateString(clientData.clientName, regex.nameRegex);
+        const clientName = securityUtils.validateString(clientData.clientName, regex.stdStrRegex);
         if(clientName === false) return {success:false, message: "Mauvais nom de client"};
 
-        const clientType = securityUtils.validateString(clientData.type, regex.nameRegex);
+        const clientType = securityUtils.validateString(clientData.type, regex.stdStrRegex);
         if(clientType === false) return {success:false, message: "Mauvais type de client"};
 
         const clientMail = securityUtils.validateString(clientData.mail, regex.mailRegex);
@@ -145,7 +169,7 @@ class ContractsService {
         const clientAddress = securityUtils.validateString(clientData.address, regex.postalAddressRegex);
         if(clientAddress === false) return {success:false, message: "Mauvaise adresse postale du client"};
 
-        const clientCity = securityUtils.validateString(clientData.city, regex.nameRegex);
+        const clientCity = securityUtils.validateString(clientData.city, regex.stdStrRegex);
         if(clientCity === false) return {success:false, message: "Mauvaise ville du client"};
 
         const clientZipcode = securityUtils.validateString(clientData.zipcode, regex.zipcodeRegex);

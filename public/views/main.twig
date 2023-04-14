@@ -6,7 +6,10 @@
     <title>{{ title }}</title>
     <meta name="description" content="{{ description }}">
     <link href="/css/main.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% if disable.navbar is not defined %}
+        <link href="/css/medifont/medifont.css" rel="stylesheet">
+    {% endif %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="/libs/socketio/socket.io.js"></script>
     <script src="/libs/jquery/jquery.js"></script>
@@ -23,15 +26,22 @@
         <div class="app-content">
             <div class="topnav">
                 <span class="medisales">MEDISales</span>
+
+                <div class="right-content">
+                    <a class="med-settings" href="#"></a>
+                    <a class="med-bell" href="#"></a>
+                    <p class="username">{{ user.name }}</p>
+                    <a class="med-disconnect" href="#"></a>
+                </div>
             </div>
 
             <div class="main-panel">
                 <div class="navbar">
                     <nav class="nav">
                         <div class="navlist">
-                            <a></a>
-                            <a></a>
-                            <a></a>
+                            <a class="med-box active" href="#"></a>
+                            <a class="med-contracts" href="#"></a>
+                            <a class="med-stats" href="#"></a>
                         </div>
                     </nav>
                 </div>
@@ -47,7 +57,7 @@
             </div>
         </div>
     {% else %}
-        <main class="content">
+        <main class="login-container">
             {% if content %}
                 {% include content %}
             {% endif %}

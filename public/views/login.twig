@@ -1,11 +1,22 @@
 <div class="login-content">
     <div class="frosted-panel">
-        <div class="inputs">
-            <input type="text" class="login-input" id="username" name="username" placeholder="Nom d'utilisateur"/>
-            <input type="password" class="login-input" id="password" name="password" placeholder="Mot de passe"/>
+        <div class="inner-content">
+            <h1 class="welcome-message">Se connecter à MEDISales</h1>
+            <div class="inputs">
+                <div class="credential-container">
+                    <img class="input-icon" src="./assets/svg/user.png">
+                    <input type="text" class="login-input" id="username" name="username" placeholder="Nom d'utilisateur"/>
+                </div>
+                <div class="credential-container">
+                    {# <span class="material-icons">key</span> #}
+                    <img class="input-icon" src="./assets/svg/key.png">
+                    <input type="password" class="login-input" id="password" name="password" placeholder="Mot de passe"/>
+                </div>
+            </div>
+            {# <button class="login-button" id="signin">
+                <span class="lock"></span>
+            </button> #}
+            <button class="submit" id="signin"><i class="fa fa-long-arrow-right"></i></button>
         </div>
-        <button class="login-button" id="signin">
-            <span class="lock"></span>
-        </button>
     </div>
 </div>
