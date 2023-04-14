@@ -2,6 +2,9 @@ import NotificationPopup from './notification-popup.js';
 const socket = io();
 
 let selected_products = [];
+let contractProducts = [];
+let productsInfo = {};
+let contractInfo = {};
 
 $('.multi-select').select2({
     theme: 'bootstrap-5',
@@ -41,7 +44,11 @@ $('.submit-filters').click(() => {
     }
     socket.emit("getSortedProducts", data);
 })
-$('.contract-button').click(() => openContractModal());
+$('.contract-button').click(() => {
+    selected_products = selected_products.filter(prod_id => prod_id !== undefined);
+    contractProducts = [...selected_products];
+    createContract("product-modal", contractProducts[0]);
+});
 
 function productTemplate(product) {
     const productHTML = `<div class="product" id="prod_${product.CodeProd}" prod-code=${product.CodeProd}>
@@ -50,167 +57,293 @@ function productTemplate(product) {
                                     <input type="checkbox" id="prodBtn_${product.CodeProd}" name="Products" value=${product.CodeProd}>
                                 </div>
                                 <img class="prod-image" src="" alt="Image d'illustration pour ${product.Libelle}">
-                                <p class="prod-name">${product.Libelle}</p>
+                                <p class="prod-name" prod-code>${product.Libelle}</p>
                                 <p class="prod-price">${(product.Prix).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}€/boîte</p>
                             </div>
                         </div>`
     return productHTML;
 }
 
-function productModalTemplate(products) {
-    console.log(products);
-    let productModal = `<script type="text/template" id="modal-products-template">
-                            <div class="bbm-modal__topbar">
-                                <h3 class="bbm-modal__title">Création du contrat</h3>
-                            </div>
-                            <div class="bbm-modal__section">`
+let appendthis = "<div class='js-modal-close modal-overlay'></div>";
 
-    products.forEach((product) => {
-        productModal += `<div class="prod-section">
-                            <h4 class="prod-title">${product.Libelle}</h4>
-                            <div class="input-container">
-                                <input type="number" class="modal-input" id="qtt_${product.CodeProd}" name="qtt_${product.CodeProd}">
-                                <label for="qtt_${product.CodeProd}">Quantité</label>
-                            </div>
-                            <div class="input-container">
-                                <input type="number" class="modal-input" id="freq_${product.CodeProd}" name="freq_${product.CodeProd}">
-                                <label for="freq_${product.CodeProd}">Nombre de livraisons par mois</label>
-                            </div>
-                            <div class="input-container">
-                                <input type="number" class="modal-input" id="duree_${product.CodeProd}" name="duree_${product.CodeProd}">
-                                <label for="duree_${product.CodeProd}">Durée en mois</label>
-                            </div>
-                        </div>`
-    })
-    productModal += `</div>
-                    <div class="bbm-modal__bottombar">
-                        <a href="#" class="bbm-button previous inactive">Précédent</a>
-                        <a href="#" class="bbm-button next">Suivant</a>
-                    </div>
-                </script>`
-
-    return productModal;
-}
-
-async function addContractModal() {
-    let products = await new Promise((resolve, reject) => {
-        let prods = [];
-        selected_products.forEach((product, index, array) => {
-            $.post("/api/store/getProduct", {id: product})
-            .done((productData) => {
-                prods.push(productData);
-                console.log(prods)
+function createContract(modalBox, productID = "") {
+    $("body").append(appendthis);
+    $(".modal-overlay").fadeTo(200, 0.7);
+    $("#" + modalBox).fadeIn();
+    switch(modalBox) {
+        case "product-modal":
+            console.log(productsInfo);
+            let product_name = $(`.prod-name[prod-code=${productID}]`).html();
+            $('#product-modal-title').html(`Modalités de contrat - ${product_name}`)
+            $(`#add_product`).on("click", (e) => {
+                const productData = {
+                    prodID: productID,
+                    qtt: $(`#qtt`).val(),
+                    frequency: $(`#freq`).val(),
+                    endDate: $(`#endDate`).val(),
+                }
+                productsInfo[`${productID}`] = productData;
+                contractProducts.shift();
+                $(".modal-box, .modal-overlay").fadeOut(100, function() {
+                    $(".modal-overlay").remove();
+                    $(this).trigger('reset');
+                    if(contractProducts[0] !== undefined) createContract("product-modal", contractProducts[0])
+                    else createContract("client-modal")
+                });
             })
-            .fail(function(xhr, status, err) {
-                let errorMessage;
-                try {
-                    if(xhr.responseJSON.error.message) {
-                        errorMessage = xhr.responseJSON.error.message
-                    } else {
-                        errorMessage = xhr.responseJSON.error;
+            $(".js-modal-no").click(function() {
+                $(".modal-box, .modal-overlay").fadeOut(100, function() {
+                    $(".modal-overlay").remove();
+                });
+                productsInfo = {};
+            })
+            break;
+        case "client-modal":
+            console.log(productsInfo);
+            $.get(`/contracts/getClients`)
+            .done(function(data) { 
+                const clients = data.clients;
+                let available_clients = [];
+                for(let client of clients) {
+                    available_clients.push(
+                        { 
+                            label:(client.Nom) + " (" + client.CP + ")",
+                            nom: client.nom,
+                            id: client.CodeClient,
+                            type: client.Type,
+                            mail: client.Mail,
+                            street: address.Adresse,
+                            city: address.Ville,
+                            postcode: address.CP,
+                        });
+                }
+                $("#libelle").autocomplete({
+                    minLength:2,
+                    delay: 300,
+                    source: available_clients,
+                    focus: function(event, ui) {
+                        $("#libelle").val(ui.item.label);
+                        return false;
+                    },
+                    select: function(event, ui) {
+                        $("#libelle").val(ui.item.nom);
+                        $("#idclient").val(ui.item.id);
+                        $("#typeclient").val(ui.item.type);
+                        $("#street").val(ui.item.street);
+                        $("#zipcode").val(ui.item.postcode);
+                        $("#city").val(ui.item.city);
+                        $("#mail").val(ui.item.mail);
+                        return false;
                     }
-                } catch (e) {
-                    errorMessage = "undefined error"
-                }
-                if(errorMessage) {
-                    new NotificationPopup(`Erreur`,`Echec de l'enregistrement`, errorMessage, `error`).show();
-                }
+                });
+                $(`#addClient_form`).on("submit", (e) => {
+                    e.preventDefault();
+                    const clientData = {
+                        idclient: $(`#idclient`).val(),
+                        nomClient: $(`#libelle`).val(),
+                        street: $(`#street`).val(),
+                        type: $(`#type`).val(),
+                        postalcode: $(`#zipcode`).val(),
+                        city: $(`#city`).val(),
+                        mail: $(`#mail`).val(),
+                    }
+
+                    $.post(`/contracts/saveclient`, clientData)
+                    .done(function(data) {
+                        $(".modal-box, .modal-overlay").fadeOut(100, function() {
+                            $(".modal-overlay").remove();
+                        });
+                        contractInfo["clientID"] = data.clientID;
+                        contractInfo["productsData"] = productsInfo;
+
+                        $.post(`/contracts/save`, {data: contractInfo})
+                        .done(function(data) {
+                            new NotificationPopup(`Succès`,`Succès de l'enregistrement`, "Le contrat a été enregistré avec succès", `success`).show();
+                        })
+                        .fail(function(xhr, status, err) {
+                            let errorMessage;
+                            try {
+                                if(xhr.responseJSON.error.message) {
+                                    errorMessage = xhr.responseJSON.error.message
+                                } else {
+                                    errorMessage = xhr.responseJSON.error;
+                                }
+                            } catch (e) {
+                                errorMessage = "undefined error"
+                            }
+                            if(errorMessage) {
+                                new NotificationPopup(`Erreur`,`Echec de l'enregistrement`, errorMessage, `error`).show();
+                            }
+                        })
+                    })
+                    .fail(function(xhr, status, err) {
+                        let errorMessage;
+                        try {
+                            if(xhr.responseJSON.error.message) {
+                                errorMessage = xhr.responseJSON.error.message
+                            } else {
+                                errorMessage = xhr.responseJSON.error;
+                            }
+                        } catch (e) {
+                            errorMessage = "undefined error"
+                        }
+                        if(errorMessage) {
+                            new NotificationPopup(`Erreur`,`Echec de l'enregistrement`, errorMessage, `error`).show();
+                        }
+                    })
+                })
             })
-            if (index === array.length -1) resolve(prods);
-        })
-    })
+            $(".js-modal-no").click(function() {
+                $(".modal-box, .modal-overlay").fadeOut(100, function() {
+                    $(".modal-overlay").remove();
+                });
+                productsInfo = {};
+                contractInfo = {};
+            })
+            break;
+    }
 
-    const productsTemplate = productModalTemplate(products);
-    const contractModal = `<script type="text/template" id="modal-template">
-                                <div class="my-container"></div>
-                            </script>
-
-                            ${productsTemplate}
-
-                            <script type="text/template" id="modal-client-template">
-                                <div class="bbm-modal__topbar">
-                                <h3 class="bbm-modal__title">Wizard example - step 2</h3>
-                                </div>
-                                <div class="bbm-modal__section">
-                                <p>This is the second step of the wizard.</p>
-                                </div>
-                                <div class="bbm-modal__bottombar">
-                                <a href="#" class="bbm-button previous">Previous</a>
-                                <a href="#" class="bbm-button next">Next</a>
-                                </div>
-                            </script>
-
-                            <script type="text/template" id="modal-sign-template">
-                                <div class="bbm-modal__topbar">
-                                <h3 class="bbm-modal__title">Wizard example - step 2</h3>
-                                </div>
-                                <div class="bbm-modal__section">
-                                <p>This is the second step of the wizard.</p>
-                                </div>
-                                <div class="bbm-modal__bottombar">
-                                <a href="#" class="bbm-button previous">Previous</a>
-                                <a href="#" class="bbm-button next">Next</a>
-                                </div>
-                            </script>
-
-                            <script type="text/template" id="modal-summary-template">
-                                <div class="bbm-modal__topbar">
-                                <h3 class="bbm-modal__title">Wizard example - step 3</h3>
-                                </div>
-                                <div class="bbm-modal__section">
-                                <p>And finally, the last step!</p>
-                                </div>
-                                <div class="bbm-modal__bottombar">
-                                <a href="#" class="bbm-button previous">Previous</a>
-                                <a href="#" class="bbm-button done">Done</a>
-                                </div>
-                            </script>`
-    $('.app-content').append(contractModal);
-}
-
-async function openContractModal() {
-    await addContractModal();
-    const Modal = Backbone.Modal.extend({
-        template: _.template($('#modal-template').html()),
-    
-        viewContainer: '.my-container',
-        submitEl: '.done',
-        cancelEl: '.cancel',
-    
-        views: {
-          'click #step1': {
-            view: _.template($('#modal-products-template').html())
-          },
-          'click #step2': {
-            view: _.template($('#modal-client-template').html())
-          },
-          'click #step3': {
-            view: _.template($('#modal-sign-template').html())
-          },
-          'click #step4': {
-            view: _.template($('#modal-summary-template').html())
-          }
-        },
-    
-        events: {
-          'click .previous': 'previousStep',
-          'click .next': 'nextStep'
-        },
-    
-        previousStep: function(e) {
-          e.preventDefault();
-          this.previous();
-        },
-    
-        nextStep: function(e) {
-          e.preventDefault();
-          this.next();
-        }
+    $(".js-modal-close, .modal-overlay").click(function() {
+        $(".modal-box, .modal-overlay").fadeOut(100, function() {
+            $(".modal-overlay").remove();
+        });
     });
-
-    const modalView = new Modal();
-    $('.app').html(modalView.render().el);
 }
+
+// function productModalTemplate(productID, step) {
+//     const template = `<fieldset data-step="${step}">
+//                         <div class="d-flex justify-content-between align-items-center">
+//                             <h5>Modalités de contrat</h5>
+//                             <span class="lead">${$(`.prod-name[prod-code=${productID}]`).html()}</span>
+//                         </div>
+//                         <hr>
+//                         <div class="form-group row">
+//                             <div class="col-sm-12">
+//                                 <label for="qtt_${productID}">Quantité à livrer</label>
+//                                 <input type="number" name="qtt_${productID}" id="qtt_${productID}" autocomplete="off" class="form-control" required>
+//                             </div>
+//                         </div>
+//                         <div class="form-group row">
+//                             <div class="col-sm-12">
+//                                 <label for="freq_${productID}">Nombre de livraisons par mois</label>
+//                                 <input name="freq_${productID}" id="freq_${productID}" type="number" autocomplete="off" class="form-control" required/>
+//                             </div>
+//                         </div>
+//                         <div class="form-group row">
+//                             <div class="col-sm-12">
+//                                 <label for="endDate_${productID}">Durée de contrat en mois</label>
+//                                 <input name="endDate_${productID}" id="endDate_${productID}" type="number" autocomplete="off" class="form-control" required/>
+//                             </div>
+//                         </div>
+//                     </fieldset>`
+//     return template;
+// }
+
+// function modalTemplate(productsTemplate) {
+//     const template = `<div class="modal fade" id="contractModal" role="dialog" aria-labelledby="contractModal" data-current-step="1" aria-hidden="true">
+//                         <div class="modal-dialog" role="document">
+//                             <div class="modal-content">
+//                                 <div class="modal-header">
+//                                     <h5 class="modal-title" id="contractModalLabel">Création du contrat</h5>
+//                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+//                                         <span aria-hidden="true">&times;</span>
+//                                     </button>
+//                                 </div>
+//                                 <div class="modal-body">
+//                                     <form action="" method="post">
+//                                         ${productsTemplate}
+
+//                                         <fieldset data-step="${(selected_products.length + 1)}">
+//                                             <div class="d-flex justify-content-between align-items-center">
+//                                                 <h5>Informations client</h5>
+//                                                 <span class="lead">#1</span>
+//                                             </div>
+//                                             <hr>
+//                                             <div class="form-group row">
+//                                                 <div class="col-sm-12">
+//                                                     <label for="libelle">Nom du client</label>
+//                                                     <input type="text" name="libelle" id="libelle" placeholder="ex. Apple" autocomplete="off" class="form-control" required>
+//                                                 </div>
+//                                             </div>
+//                                             <div class="form-group row">
+//                                                 <div class="col-sm-12">
+//                                                     <label for="mail">Adresse mail</label>
+//                                                     <input name="mail" id="mail" type="text" placeholder="ex. exemple@medisales.com" autocomplete="off" class="form-control" required/>
+//                                                 </div>
+//                                             </div>
+//                                             <div class="form-group row">
+//                                                 <div class="col-sm-12">
+//                                                 <label for="type">Type de client</label>
+//                                                 <input name="type" id="type" type="text" placeholder="ex. Médecin, Pharmacie..." autocomplete="off" class="form-control" required/>
+//                                                 </div>
+//                                             </div>
+//                                         </fieldset>
+
+//                                         <fieldset data-step="${(selected_products.length + 2)}">
+//                                             <div class="d-flex justify-content-between align-items-center">
+//                                                 <h5>Informations client</h5>
+//                                                 <span class="lead">#2</span>
+//                                             </div>
+//                                             <hr>
+//                                             <div class="form-group row">
+//                                                 <div class="col-sm-12">
+//                                                     <label for="street">Rue et n°</label>
+//                                                     <input type="text" name="street" id="street" placeholder="ex. 71 rue de la soif" class="form-control" autocomplete="off">
+//                                                 </div>
+//                                             </div>
+//                                             <div class="form-group row">
+//                                                 <div class="col-sm-12">
+//                                                     <label for="zipcode">Code postal</label>
+//                                                     <input type="text" name="zipcode" id="zipcode" min=0 placeholder="ex. 69001" autocomplete="off" class="form-control" required>
+//                                                 </div>
+//                                             </div>
+//                                             <div class="form-group row">
+//                                                 <div class="col-sm-12">
+//                                                     <label for="city">Ville</label>
+//                                                     <input type="text" name="city" id="city" placeholder="ex. Lyon" autocomplete="off" class="form-control" required>
+//                                                 </div>
+//                                             </div>
+//                                         </fieldset>
+
+//                                         <div class="modal-footer">
+//                                             <button type="button" class="btn btn-secondary" data-step-to="prev">
+//                                                 Précédent
+//                                             </button>
+//                                             <button type="button" class="btn btn-success" data-step-to="next">
+//                                                 Suivant
+//                                             </button>
+//                                             <button type="submit" class="btn btn-info">
+//                                                 Confirmer
+//                                             </button>
+//                                         </div>
+//                                     </form>
+//                                 </div>
+//                             </div>
+//                         </div>
+//                     </div>`
+
+//     return template;
+// }
+
+// function createWizardModal() {
+//     let productsTemplate = "";
+
+//     let prod_count = 1;
+//     selected_products.forEach((productID) => {
+//         productsTemplate += productModalTemplate(productID, prod_count);
+//         prod_count++;
+//     })
+
+//     const contractModal = modalTemplate(productsTemplate);
+//     $('.content').append(contractModal);
+
+//     $('#contractModal').modalWizard().on('submit', function (e) {
+//         alert('submited');
+//         $(this).trigger('reset');
+
+//         $(this).modal('hide');
+//     });
+// }
 
 function bindProductsEvent() {
     $('.product').click(function(event) {
