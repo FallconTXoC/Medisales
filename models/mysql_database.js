@@ -16,15 +16,15 @@ module.exports = {
 
     runQuery: function (query, callback) {
         pool.getConnection(function(err, conn) {
-            if (err) console.log(err);
+            if(err) console.log(err);
             if(process.env.DEBUG === 'true') console.log(query);
             conn.query(query, function (err, results, fields) {
                 if (err) {
                     console.log(err);
-                    if (callback) callback(err, null);
+                    if(callback) callback(err, null);
                     conn.release();
                 } else {
-                    if (callback) callback(null, results);
+                    if(callback) callback(null, results);
                     conn.release();
                 }
             });
