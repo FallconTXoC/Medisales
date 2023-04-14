@@ -10,16 +10,16 @@ class StoreService {
         const io = socketHelper.getSockets();
         io.on('connection', (socket) => {
             socket.on("getSortedProducts", async (data) => {
-                io.emit("sendSortedProducts", getSortedProducts(data));
+                io.emit("sendSortedProducts", await getSortedProducts(data));
             });
         });
     }
 
-    getProducts() {
-        return ProductsInstance.getProducts();
+    async getProducts() {
+        return await ProductsInstance.getProducts();
     }
 
-    getSortedProducts(data) {
+    async getSortedProducts(data) {
         const symptomes = data.symptomes ?? [];
         const principesActifs = data.principesActifs ?? [];
         const maladies = data.maladies ?? [];
@@ -37,15 +37,15 @@ class StoreService {
                 },
                 PrincipeActif: {
                     name: "Prod_Contient",
-                    keyword: "pu",
-                    propertyCode: "CodeSympt",
+                    keyword: "pc",
+                    propertyCode: "CodeMol",
                     values: principesActifs,
                     isInternal: false
                 },
                 Maladie: {
                     name: "Prod_Combat",
-                    keyword: "pu",
-                    propertyCode: "CodeSympt",
+                    keyword: "pco",
+                    propertyCode: "CodeMaladie",
                     values: maladies,
                     isInternal: false
                 },
@@ -66,17 +66,17 @@ class StoreService {
             }
         }
 
-        return ProductsInstance.sortProducts(tablesData);
+        return await ProductsInstance.sortProducts(tablesData);
     }
 
-    getProductInfo(idprod) {
+    async getProductInfo(idprod) {
         let data = {
-            produit: ProductsInstance.findByID(idprod),
-            symptomes: ProductsInstance.getSymptomes(idprod),
-            principesActifs: ProductsInstance.getPrincipesActifs(idprod),
-            maladies: ProductsInstance.getMaladies(idprod),
-            forme: ProductsInstance.getForme(idprod),
-            voieAdmin: ProductsInstance.getVoieAdmin(idprod)
+            produit: await ProductsInstance.findByID(idprod),
+            symptomes: await ProductsInstance.getSymptomes(idprod),
+            principesActifs: await ProductsInstance.getPrincipesActifs(idprod),
+            maladies: await ProductsInstance.getMaladies(idprod),
+            forme: await ProductsInstance.getForme(idprod),
+            voieAdmin: await ProductsInstance.getVoieAdmin(idprod)
         }
 
         return data;

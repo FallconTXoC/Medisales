@@ -36,7 +36,9 @@ class Products {
 
     async getProducts() {
         return await new Promise((resolve, reject) => {
-            db.runPreparedQuery(`SELECT * FROM Produit`, (err, result) => {
+            console.log("querying")
+            db.runQuery(`SELECT * FROM Produit`, (err, result) => {
+                console.log("result out")
                 if(err) return reject(err);
                 else return resolve(result);
             });

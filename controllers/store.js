@@ -15,7 +15,9 @@ async function display(req, res) {
         defer: true
     })
     res.render_data.content = "store.twig";
-    res.render_data.products = StoreServiceInstance.getProducts();
+    res.render_data.products = await StoreServiceInstance.getProducts();
+
+    console.log(res.render_data.products)
 
     res.render("main.twig", res.render_data);
 }
@@ -26,7 +28,7 @@ async function showProduct(req, res) {
         defer: true
     })
     res.render_data.content = "product_page.twig";
-    res.render_data.productInfo = ProductServiceInstance.getProductInfo(req.query.idprod);
+    res.render_data.productInfo = await StoreServiceInstance.getProductInfo(req.query.idprod);
 
     res.render("main.twig", res.render_data);
 }
