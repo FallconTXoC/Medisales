@@ -9,7 +9,7 @@ module.exports = {
          decryptToken: async (token) => {
             return await new Promise((resolve) => {
                 jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-                    if (err) return console.log(err)
+                    if(err) return console.log(err)
                     resolve(decoded)
                 })
             })
@@ -23,10 +23,10 @@ module.exports = {
      patchToken: async (token, data) => {
         return await new Promise((resolve) => {
             jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-                if (err) throw err
+                if(err) throw err
                 let finalObject = {};
                 for (const [key, value] of Object.entries(decoded)) {
-                    if (key !== "exp" && key !== "iat") finalObject[key] = value
+                    if(key !== "exp" && key !== "iat") finalObject[key] = value
                 }
                 for (const [key, value] of Object.entries(data)) {
                     finalObject[key] = value
@@ -56,7 +56,7 @@ module.exports = {
     getAuthToken: async function (token) {
         return new Promise((resolve) => {
             jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-                if (err) return console.log(err)
+                if(err) return console.log(err)
                 resolve(decoded.authToken)
             })
         })

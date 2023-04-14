@@ -107,7 +107,7 @@ function bindProductsEvent() {
             $(`input[value=${prodID}]`).prop('checked', false);
             
             selected_products = selected_products.filter(prod_id => prod_id !== prodID);
-            if (selected_products.length === 0) $('.contract-button').addClass('hidden');
+            if(selected_products.length === 0) $('.contract-button').addClass('hidden');
         } else {
             $(this).addClass('active');
             $(`input[value=${prodID}]`).prop('checked', true);

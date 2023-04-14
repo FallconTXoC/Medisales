@@ -6,13 +6,13 @@ module.exports = {
     isConnected: async function(req, res, next){
         const connected = await new Promise(async (resolve) => {
             const token = req.cookies.token
-            if (token) {
+            if(token) {
                 const user = await tokenHelper.decryptToken(token);
-                if (!user.id_user) return resolve(false);
+                if(!user.id_user) return resolve(false);
                 const userConnected = await new User(user.id_user).userExists();
-                if (userConnected === true) {
+                if(userConnected === true) {
                     jwt.verify(token, process.env.JWT_SECRET,{}, (err) => {
-                        if (!err) resolve(true);
+                        if(!err) resolve(true);
                         else resolve(false);
                     });
                 } else {
@@ -21,7 +21,7 @@ module.exports = {
                 }
             } else resolve(false);
         });
-        if (connected === true) return next();
+        if(connected === true) return next();
         else return res.redirect("/login");
     }
 } 

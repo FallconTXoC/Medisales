@@ -51,11 +51,11 @@ class ExpressLoader {
                 "selected_menu": "store",
             }
             const token = req.cookies.token
-            if (token) {
+            if(token) {
                 const cookies_data = await tokenHelper.decryptToken(token);
-                if (cookies_data.state) return next();
+                if(cookies_data.state) return next();
                 const user = await new User(cookies_data.id_user).getUser();
-                if (user.length < 1) return next();
+                if(user.length < 1) return next();
                 res.render_data.user = {
                     id: cookies_data.id_user,
                     name: user.firstname + " " + user.lastname,
