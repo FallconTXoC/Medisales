@@ -477,7 +477,7 @@
     margin-bottom: 16px;
     label {
         margin-bottom: 8px;
-        font-size: 14px;
+        font-size: 1.1vw;
         color: rgb(52, 71, 103);
     }
     input {
@@ -486,7 +486,8 @@
         border: 1px solid rgb(210, 214, 218);
         border-radius: 8px;
         outline: none;
-        color: rgb(103, 116, 142);
+        color: rgb(44, 50, 61);
+        font-size: 0.9vw;
     }
 }
 
@@ -520,6 +521,7 @@
 .modal-box .modal-header h4 {
     font-family: Montserrat;
 	margin: 0;
+    font-size: 1.3vw;
 }
 
 .modal-box .modal-body {
@@ -557,7 +559,7 @@ a.close {
 }
 
 .js-modal-no {
-    font-size: 1.3vw;
+    font-size: 1.1vw;
     text-decoration: none;
     margin-right: 1vw;
 	color: #bbb;
@@ -570,8 +572,8 @@ a.close {
 .formSubmit {
     display: inline-block;
     background: #5193ff;
-    height: 2.8vw;
-    width: 6.2vw;
+    height: 2.3vw;
+    width: 5.7vw;
     margin: 0;
     text-align: center;
     cursor: pointer;
@@ -586,7 +588,7 @@ a.close {
 
     color: white;
     text-align: center;
-    font-size: 1.3vw;
+    font-size: 1.1vw;
     &:hover:enabled {
         background: rgb(94, 169, 255);
     }
