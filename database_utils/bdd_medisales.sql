@@ -136,18 +136,16 @@ CREATE TABLE Contrat(
         ID                Varchar (20) NOT NULL ,
         CodeClient        Varchar (5) NOT NULL ,
         CodeProd          Varchar (15) NOT NULL ,
+        ID_Utilisateur    Varchar (20) NOT NULL ,
         Date              Date NOT NULL ,
         QTT               Int NOT NULL ,
         DateFin           Date NOT NULL ,
         Frequence         Int NOT NULL ,
-        ID_Utilisateur    Varchar (20) NOT NULL ,
-        CodeClient_Conclu Varchar (5) NOT NULL ,
-        CodeProd_Produit  Varchar (15) NOT NULL
 	,CONSTRAINT Contrat_PK PRIMARY KEY (ID)
 
 	,CONSTRAINT Contrat_Utilisateur_FK FOREIGN KEY (ID_Utilisateur) REFERENCES Utilisateur(ID)
-	,CONSTRAINT Contrat_Client0_FK FOREIGN KEY (CodeClient_Conclu) REFERENCES Client(CodeClient)
-	,CONSTRAINT Contrat_Produit1_FK FOREIGN KEY (CodeProd_Produit) REFERENCES Produit(CodeProd)
+	,CONSTRAINT Contrat_Client0_FK FOREIGN KEY (CodeClient) REFERENCES Client(CodeClient)
+	,CONSTRAINT Contrat_Produit1_FK FOREIGN KEY (CodeProd) REFERENCES Produit(CodeProd)
 )ENGINE=InnoDB;
 
 #------------------------------------------------------------
