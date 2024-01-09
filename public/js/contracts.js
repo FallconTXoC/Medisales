@@ -10,7 +10,7 @@ const frequency = function(cell, formatterParams){
     return (cell.getValue > 1) ? `${cell.getValue()} livraisons/mois` : `${cell.getValue()} livraison/mois`;
 }
 let notifier = new AWN();
-let contracts = {}
+let contracts = {};
 let tableData = [];
 let contractID = "";
 let contractToDelete = "";
