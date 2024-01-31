@@ -1,4 +1,9 @@
-![Logo](https://i.ibb.co/WKRkbzC/MEDISales-white-BGv2.png)
+<p align="center">
+  <picture>
+    <img alt="Wave Terminal Logo" src="https://i.ibb.co/WKRkbzC/MEDISales-white-BGv2.png" style="max-width: 100%;">
+  </picture>
+  <br/>
+</p>
 
 
 
