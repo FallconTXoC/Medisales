@@ -79,7 +79,7 @@ DEBUG        // boolean, if true database queries will be logged
 🇫🇷 Les comptes présents dans le script partagent le même mot de passe : `pass123`.
 
 ## Mentions
-Project was done in 2022.
+Project was done in 2022. No security update has been provided since then, project might include severe vulnerabilities.
 
 ## License
 
