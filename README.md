@@ -1,6 +1,6 @@
 <p align="center">
   <picture>
-    <img alt="Wave Terminal Logo" src="https://i.ibb.co/WKRkbzC/MEDISales-white-BGv2.png" style="max-width: 100%;">
+    <img alt="Medisales logo" src="https://i.ibb.co/WKRkbzC/MEDISales-white-BGv2.png" style="max-width: 100%;">
   </picture>
   <br/>
 </p>
@@ -78,10 +78,8 @@ DEBUG        // boolean, if true database queries will be logged
 
 🇫🇷 Les comptes présents dans le script partagent le même mot de passe : `pass123`.
 
-## Documentation
-
-[🇫🇷 Documentation](https://docdro.id/NajOId5)
-
+## Mentions
+Project was done in 2022.
 
 ## License
 
